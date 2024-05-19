@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Micro+5&display=swap');
+
+h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    color: #fff;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+p {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #fff;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* input {
+    width: 50%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: none;
+    border-radius: 5px;
+} */
+
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 70%;
+    background-color: #406191;
+}
+
+.logo {
+    height: 20rem;
+    border-radius: 50%;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+

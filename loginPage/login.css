@@ -6,6 +6,13 @@
 
 body {
     margin: 0;
+    background-color: rgb(162, 162, 162);
+    background-image: url(/loginPage/images/geometric-building.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-blend-mode: multiply;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,6 +35,12 @@ button {
     outline: none;
     margin: 5px 0 5px 0;
     width: 100px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #577eb5;
+    transition: 200ms;
 }
 
 .login-container {

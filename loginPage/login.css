@@ -1,28 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Micro+5&display=swap');
 
-h1 {
+* {
     font-family: 'Inter', sans-serif;
-    font-size: 2rem;
-    color: #fff;
-    text-align: center;
-    margin-top: 1rem;
 }
-
-p {
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    color: #fff;
-    text-align: center;
-    margin-top: 1rem;
-}
-
-/* input {
-    width: 50%;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    border: none;
-    border-radius: 5px;
-} */
 
 body {
     margin: 0;
@@ -31,27 +11,113 @@ body {
     align-items: center;
 }
 
-.loginContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+img {
+    width: 8%;
+    height: 10%;
+    position: fixed;
+}
+
+button {
+    padding: 6px;
+    border-radius: 8px;
+    border-style: none;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+    background-color: #5B85C1;
+    color: #fff;
+    cursor: pointer;
+    outline: none;
+    margin: 5px 0 5px 0;
+    width: 100px;
+}
+
+.login-container {
+    height: 100dvh;
     width: 70%;
     background-color: #406191;
-}
-
-.logo {
-    height: 20rem;
-    border-radius: 50%;
-}
-
-.loginForm {
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    flex-direction: column;
+}
+
+.login-container h1 {
+    color: #fff;
+    text-align: center;
+    margin: 1rem 0 2rem 0;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.login-container label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.logo-container {
+    margin: 2rem 0 1rem 0;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    width: 12rem;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+}
+
+.login-container input {
+    margin: 5px 0 5px 0;
+    padding: 10px;
+    border-style: solid;
+    border-color: #7F7F7F;
+    border-radius: 5px;
+    width: 92%;     /* Could mess up its dynamic structure */
+    outline: none;
+}
+
+.form-container {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 1rem 0 2rem 0;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.align-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
+}
+
+.row {
+    margin: 5px 0 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     width: 100%;
 }
+
+.row label {
+    font-size: 14px;
+}
+
+#rememberMe {
+    width: 15px;
+    margin: 1rem 0 0 0;
+}
+
+#email {
+    text-align: left;
+}
+
 
 

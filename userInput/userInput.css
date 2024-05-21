@@ -150,9 +150,9 @@ button.return {
 	background-color: #fff;
 	border-style: solid;
 	border-color: #DCDCDC;
-	border-radius: 10px 10px 0 0;
+	border-radius: 10px 10px 5px 5px;
 	border-width: 7px 0 0 0;
-	box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.03);
+	box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
 }
 
 .form-container {
@@ -190,6 +190,7 @@ button.return {
     background-color: #5B85C1;
     color: #fff;
 	font-size: 16px;
+	font-weight: 500;
     cursor: pointer;
     outline: none;
     width: 120px;

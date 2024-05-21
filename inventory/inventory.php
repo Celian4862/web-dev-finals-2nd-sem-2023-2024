@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="tabs">
-			<button class="active">
+			<button>
 				<i class="fa-solid fa-table-columns" style="color: #ffffff;"></i>
 				<span>Dashboard</span>
 			</button>
@@ -23,7 +23,7 @@
 				<i class="fa-solid fa-user" style="color: #ffffff;"></i>
 				<span>User</span>
 			</button>
-			<button>
+			<button class="active">
 				<i class="fa-solid fa-dolly" style="color: #ffffff;"></i>
 				<span>Inventory</span>
 			</button>

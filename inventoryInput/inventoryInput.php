@@ -17,11 +17,21 @@
 				</div>
 			</div>
 			<div class="tabs">
-				<button>
+				<button onclick="dashboard_link()">
+					<script>
+						function dashboard_link() {
+							location.href = "../dashboard/index.html";
+						}
+					</script>
 					<i class="fa-solid fa-table-columns" style="color: #ffffff;"></i>
 					<span>Dashboard</span>
 				</button>
-				<button>
+				<button onclick="user_link()">
+					<script>
+						function user_link() {
+							location.href = "../userInput/userInput.php";
+						}
+					</script>
 					<i class="fa-solid fa-user" style="color: #ffffff;"></i>
 					<span>User</span>
 				</button>
@@ -29,11 +39,21 @@
 					<i class="fa-solid fa-dolly" style="color: #ffffff;"></i>
 					<span>Inventory</span>
 				</button>
-				<button>
+				<button onclick="shipment_link()">
+					<script>
+						function shipment_link() {
+							location.href = "../shipments/index.html";
+						}
+					</script>
 					<i class="fa-solid fa-truck" style="color: #ffffff;"></i>
 					<span>Shipments</span>
 				</button>
-				<button>
+				<button onclick="reception_link()">
+					<script>
+						function reception_link() {
+							location.href = "../receptions/index.html";
+						}
+					</script>
 					<i class="fa-solid fa-truck-ramp-box" style="color: #ffffff;"></i>
 					<span>Reception</span>
 				</button>

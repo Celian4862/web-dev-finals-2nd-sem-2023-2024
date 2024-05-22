@@ -1,6 +1,6 @@
 <?php
 
-$dsn = "mysql:host=localhost;dbname=inventorymanagement";
+$dsn = "mysql:host=localhost;dbname=webdev_inventory_management";
 $dbusername = "root";
 $dbpassword = "";
 

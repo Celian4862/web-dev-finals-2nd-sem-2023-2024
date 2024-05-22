@@ -52,11 +52,11 @@
 				<form class="form-container" action="includes/formhandler.inc.php" method="post">
 					<div class="form-group">
 						<label for="product-label">Product Label</label>
-						<input type="text" id="product-label" name="product-label" placeholder="Product label" required/>
+						<input type="text" id="product-label" name="label" placeholder="Product label" required/>
 					</div>
 					<div class="form-group">
 						<label for="description">Description</label>
-						<textarea id="description" name="description" placeholder="Description" required></textarea>
+						<textarea id="description" name="product_description" placeholder="Description" required></textarea>
 					</div>
 					<div class="form-group">
 						<label for="warranty">Warranty</label>

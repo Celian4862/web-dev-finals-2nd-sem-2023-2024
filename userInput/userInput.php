@@ -42,7 +42,7 @@
 				<button onclick="shipment_link()">
 					<script>
 						function shipment_link() {
-							location.href = "../userInput/index.php";
+							location.href = "../Shipments/index.html";
 						}
 					</script>
 					<i class="fa-solid fa-truck" style="color: #ffffff;"></i>

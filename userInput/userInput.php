@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Users - Input</title>
-		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="userInput.css" />
 		<script defer src="userInput.js" type="text/javascript"></script>
 		<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
 	</head>
@@ -48,18 +48,18 @@
 				<a href=""><p>Back to list</p></a>
 			</div>
 			<div class="box-container">
-				<form class="form-container">
+				<form class="form-container" action="includes/formhandler.inc.php" method="post">
 					<div class="form-group">
 						<label for="email">Email</label>
 						<input type="email" id="email" name="email" placeholder="Email" required/>
 					</div>
 					<div class="form-group">
 						<label for="password">Password</label>
-						<input type="password" id="password" name="password" placeholder="Password" required />
+						<input type="password" id="password" name="pwd" placeholder="Password" required />
 					</div>
+					<button>Add user</button>
 				</form>
 			</div>
-			<button>Add user</button>
 		</div>
 	</body>
 </html>

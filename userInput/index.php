@@ -49,7 +49,7 @@
 				<a href=""><p>Back to list</p></a>
 			</div>
 			<div class="box-container">
-				<form class="form-container">
+			<form class="form-container" action="includes/formhandler.inc.php" method="post">
 					<div class="form-group">
 						<label for="email">Email</label>
 						<input type="email" id="email" name="email" placeholder="Email" required/>
@@ -58,9 +58,9 @@
 						<label for="password">Password</label>
 						<input type="password" id="password" name="pwd" placeholder="Password" required />
 					</div>
+					<button>Add user</button>
 				</form>
 			</div>
-			<button>Add user</button>
 		</div>
 	</body>
 </html>

@@ -56,7 +56,7 @@
 					</div>
 					<div class="form-group">
 						<label for="password">Password</label>
-						<input type="password" id="password" name="password" placeholder="Password" required />
+						<input type="password" id="password" name="pwd" placeholder="Password" required />
 					</div>
 				</form>
 			</div>

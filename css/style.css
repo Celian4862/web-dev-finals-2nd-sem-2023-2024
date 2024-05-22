@@ -114,6 +114,10 @@ button.return {
 /* --- content --- */
 
 .content-header {
-	display: block;
 	margin: 2rem 0 2rem 3rem;
+}
+
+.content-header span {
+	font-size: 30px;
+	font-weight: 400;
 }

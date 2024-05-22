@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Users - Input</title>
 		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../userInput/style.css" />
 		<script defer src="userInput.js" type="text/javascript"></script>
 		<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
 	</head>
@@ -55,7 +56,7 @@
 					</div>
 					<div class="form-group">
 						<label for="password">Password</label>
-						<input type="password" id="password" name="password" placeholder="Password" required />
+						<input type="password" id="password" name="pwd" placeholder="Password" required />
 					</div>
 				</form>
 			</div>

@@ -6,7 +6,6 @@
 		<title>Inventory - Input</title>
 		<link rel="stylesheet" type="text/css" href="../css/style.css" />
 		<link rel="stylesheet" type="text/css" href="../inventoryInput/style.css" />
-		<!-- <script defer src="userInput.js" type="text/javascript"></script> -->
 		<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
 	</head>
 	<body class="container">

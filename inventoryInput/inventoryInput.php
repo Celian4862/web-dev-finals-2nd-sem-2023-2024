@@ -3,10 +3,9 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Users - Input</title>
+		<title>Inventory - Input</title>
 		<link rel="stylesheet" type="text/css" href="../css/style.css" />
-		<link rel="stylesheet" type="text/css" href="../userInput/style.css" />
-		<script defer src="userInput.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="../inventoryInput/style.css" />
 		<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
 	</head>
 	<body class="container">
@@ -26,23 +25,23 @@
 					<i class="fa-solid fa-table-columns" style="color: #ffffff;"></i>
 					<span>Dashboard</span>
 				</button>
-				<button class="active">
+				<button onclick="user_link()">
+					<script>
+						function user_link() {
+							location.href = "../userInput/userInput.php";
+						}
+					</script>
 					<i class="fa-solid fa-user" style="color: #ffffff;"></i>
 					<span>User</span>
 				</button>
-				<button onclick="inventory_link()">
-					<script>
-						function inventory_link() {
-							location.href = "../inventory/index.html";
-						}
-					</script>
+				<button class="active">
 					<i class="fa-solid fa-dolly" style="color: #ffffff;"></i>
 					<span>Inventory</span>
 				</button>
 				<button onclick="shipment_link()">
 					<script>
 						function shipment_link() {
-							location.href = "../userInput/index.php";
+							location.href = "../shipments/index.html";
 						}
 					</script>
 					<i class="fa-solid fa-truck" style="color: #ffffff;"></i>
@@ -65,20 +64,24 @@
 		<div class="content-container">
 			<div class="header"></div>
 			<div class="content-header">
-				<span>Add new user</span>
+				<span>Add new item</span>
 				<a href=""><p>Back to list</p></a>
 			</div>
 			<div class="box-container">
-			<form class="form-container" action="includes/formhandler.inc.php" method="post">
+				<form class="form-container" action="includes/formhandler.inc.php" method="post">
 					<div class="form-group">
-						<label for="email">Email</label>
-						<input type="email" id="email" name="email" placeholder="Email" required/>
+						<label for="product-label">Product Label</label>
+						<input type="text" id="product-label" name="label" placeholder="Product label" required/>
 					</div>
 					<div class="form-group">
-						<label for="password">Password</label>
-						<input type="password" id="password" name="pwd" placeholder="Password" required />
+						<label for="description">Description</label>
+						<textarea id="description" name="product_description" placeholder="Description" required></textarea>
 					</div>
-					<button>Add user</button>
+					<div class="form-group">
+						<label for="warranty">Warranty</label>
+						<input type="text" id="warranty" name="warranty" placeholder="Warranty" required />
+					</div>
+					<button>Add item</button>
 				</form>
 			</div>
 		</div>

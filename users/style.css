@@ -73,6 +73,20 @@
 	justify-content: space-evenly;
 }
 
+.popup {
+	display: none;
+	width: 500px;
+	background-color: #fff;
+	border-radius: 8px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
+	padding: 20px;
+	z-index: 100;
+}
+
 table {
 	width: 100%;
 	border-collapse: collapse;

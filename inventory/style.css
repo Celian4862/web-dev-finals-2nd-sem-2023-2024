@@ -2,6 +2,16 @@
 
 /* --- Content --- */
 
+.content-header {
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+
+.content-header div {
+	flex-grow: 1;
+}
+
 .content-header span::before {
 	content: "";
 	background: url("https://img.icons8.com/?size=100&id=62214&format=png&color=000000") no-repeat;
@@ -15,7 +25,6 @@
 .content-header p {
 	font-size: 18px;
 	font-weight: 500;
-	float: right;
 	margin-right: 3rem;
 }
 
@@ -34,15 +43,86 @@
 	border-radius: 10px 10px 5px 5px;
 	border-width: 7px 0 0 0;
 	box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
+	padding: 20px;
+}
+
+.edit-cell {
+	display: flex;
+	justify-content: space-evenly;
 }
 
 table {
-	border-bottom: 2px solid #dcdcdc;
-	margin: 0 20px 0 20px;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+tr.table-header {
+	font-size: 18px;
+	font-weight: bold;
+	border-color: #dcdcdc;
+	border-style: solid;
+	border-width: 0 0 1px 0;
 }
 
 th {
-	font-size: 18px;
-	font-weight: bold;
-	padding: 20px 10px 10px 10px;
+	padding: 8px 20px 15px 20px;
+}
+
+td {
+	padding: 8px 20px 8px 20px;
+}
+
+/* td:last-child {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+} */
+
+button.edit {
+	aspect-ratio: 1/1;
+	background-color: #406191;
+	border-radius: 50%;
+	border-style: none;
+	outline: none;
+	cursor: pointer;
+	width: 25px;
+}
+
+button.edit:hover {
+	background-color: #36527c;
+	transition: 200ms;
+}
+
+button.delete {
+	aspect-ratio: 1/1;
+	background-color: #FE6251;
+	border-radius: 50%;
+	border-style: none;
+	cursor: pointer;
+	width: 25px;
+}
+
+button.delete:hover {
+	background-color: #db5445;
+	transition: 200ms;
+}
+
+.content-header button {
+	margin: 10px 0 10px 0;
+	border-radius: 5px;
+	border-style: none;
+	background-color: #406191;
+	color: #fff;
+	font-size: 16px;
+	font-weight: 500;
+	cursor: pointer;
+	outline: none;
+	width: 100px;
+	height: 30px;
+	cursor: pointer;
+}
+
+.content-header button:hover {
+	background-color: #36527c;
+	transition: 200ms;
 }

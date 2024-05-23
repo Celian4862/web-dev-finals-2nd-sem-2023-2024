@@ -65,6 +65,9 @@
 			<div class="header"></div>
 			<div class="content-header">
 				<span>Inventory</span>
+				<div>
+					<button>Add item</button>
+				</div>
 				<a href=""><p>Back to list</p></a>
 				<!-- TODO: ADD ARROWS FOR TABS (i'll do this tomorrow plz) -->
 				<!-- <i class="fa-solid fa-arrow-left"></i> -->
@@ -72,14 +75,43 @@
 			</div>
 			<div class="box-container">
 				<table>
-					<tr>
+					<tr class="table-header">
 						<th>Product</th>
 						<th>Description</th>
 						<th>Warranty</th>
 						<th>Edit</th>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td class="edit-cell">
+							<form action="#" method="POST" >
+								<button name="submit" class="edit">
+									<i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+								</button>
+							</form>
+							<form action="#" method="POST">
+								<button name="submit" class="delete">
+									<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+								</button>
+							</form>
+
+							<!-- <form action="#" method="POST" >
+								<button name="submit" value="<?php echo $row["#"]; ?>"  id="edit">
+									<i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+								</button>
+							</form>
+							<form action="#" method="POST">
+								<button name="submit" value="<?php echo $row["#"]; ?>" class="delete">
+									<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+								</button>
+							</form> -->
+						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
 </body>
 </html>
+

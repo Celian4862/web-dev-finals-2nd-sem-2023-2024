@@ -3,9 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Inventory</title>
+	<title>Users</title>
 	<link rel="stylesheet" type="text/css" href="../css/style.css"/>
-	<link rel="stylesheet" type="text/css" href="../inventory/style.css"/>
+	<link rel="stylesheet" type="text/css" href="../users/style.css"/>
 	<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
 </head>
 <body class="container">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<div class="tabs">
-			<button onclick="dashboard_link()">
+		<button onclick="dashboard_link()">
 				<script>
 					function dashboard_link() {
 						location.href = "../dashboard/index.html";
@@ -28,7 +28,7 @@
 			<button onclick="user_link()">
 				<script>
 					function user_link() {
-						location.href = "../userInput/userInput.php";
+						location.href = "../userInput/index.php";
 					}
 				</script>
 				<i class="fa-solid fa-user" style="color: #ffffff;"></i>
@@ -64,8 +64,8 @@
 	<div class="content-container">
 			<div class="header"></div>
 			<div class="content-header">
-				<span>Inventory</span>
-				<div class="add-item">
+				<span>User</span>
+				<div class="add-user">
 					<button>Add item</button>
 				</div>
 				<!-- TODO: ADD ARROWS FOR TABS (i'll do this tomorrow plz) -->
@@ -77,13 +77,11 @@
 			<div class="box-container">
 				<table>
 					<tr class="table-header">
-						<th>Product</th>
-						<th>Description</th>
-						<th>Warranty</th>
+						<th>User ID</th>
+						<th>Email</th>
 						<th>Edit</th>
 					</tr>
 					<tr>
-						<td></td>
 						<td></td>
 						<td></td>
 						<td class="edit-cell">

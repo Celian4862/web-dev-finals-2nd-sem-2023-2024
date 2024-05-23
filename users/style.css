@@ -10,18 +10,12 @@
 
 .content-header span::before {
 	content: "";
-	background: url("https://img.icons8.com/?size=100&id=62214&format=png&color=000000") no-repeat;
+	background: url("https://img.icons8.com/?size=100&id=98957&format=png&color=000000") no-repeat;
 	background-size: contain;
 	float: left;
 	width: 38px;
 	height: 38px;
 	padding-right: 15px;
-}
-
-.content-header p {
-	font-size: 18px;
-	font-weight: 500;
-	margin-right: 3rem;
 }
 
 .content-header a {
@@ -49,7 +43,7 @@
 	transition: 200ms;
 }
 
-.add-item {
+.add-user {
 	flex-grow: 1;
 }
 
@@ -62,7 +56,7 @@
 }
 
 .box-container {
-	width: 800px;
+	width: 500px;
 	height: 440px;
 	margin-left: 3rem;
 	background-color: #fff;

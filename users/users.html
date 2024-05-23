@@ -1,25 +1,12 @@
-<?php
-require_once "includes/dbh.inc.php";
-
-try {
-    $query = "SELECT id, label, product_description, warranty FROM products";
-    $stmt = $pdo->query($query);
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Query failed: " . $e->getMessage());
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Inventory</title>
+	<title>Users</title>
 	<link rel="stylesheet" type="text/css" href="../css/style.css"/>
-	<link rel="stylesheet" type="text/css" href="../inventory/style.css"/>
+	<link rel="stylesheet" type="text/css" href="../users/style.css"/>
 	<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
-	<script src="script.js"></script>
 </head>
 <body class="container">
 	<div class="navbar">
@@ -29,7 +16,7 @@ try {
 			</div>
 		</div>
 		<div class="tabs">
-			<button onclick="dashboard_link()">
+		<button onclick="dashboard_link()">
 				<script>
 					function dashboard_link() {
 						location.href = "../dashboard/index.html";
@@ -41,7 +28,7 @@ try {
 			<button onclick="user_link()">
 				<script>
 					function user_link() {
-						location.href = "../userInput/userInput.php";
+						location.href = "../userInput/index.php";
 					}
 				</script>
 				<i class="fa-solid fa-user" style="color: #ffffff;"></i>
@@ -77,16 +64,9 @@ try {
 	<div class="content-container">
 			<div class="header"></div>
 			<div class="content-header">
-				<span>Inventory</span>
-				<div>
-					<button onclick="inventoryInput_link()">
-						<script>
-							function inventoryInput_link() {
-								location.href = "../inventoryInput/inventoryInput.php";
-							}
-						</script>
-						Add Item
-					</button>
+				<span>User</span>
+				<div class="add-user">
+					<button>Add item</button>
 				</div>
 				<!-- TODO: ADD ARROWS FOR TABS (i'll do this tomorrow plz) -->
 				<div class="arrows">
@@ -97,45 +77,39 @@ try {
 			<div class="box-container">
 				<table>
 					<tr class="table-header">
-						<th>ID</th>
-						<th>Label</th>
-						<th>Description</th>
-						<th>Warranty</th>
+						<th>User ID</th>
+						<th>Email</th>
 						<th>Edit</th>
 					</tr>
-					<?php foreach ($products as $product): ?>
 					<tr>
-						<td><?= htmlspecialchars($product['id']) ?></td>
-						<td><?= htmlspecialchars($product['label']) ?></td>
-						<td><?= htmlspecialchars($product['product_description']) ?></td>
-						<td><?= htmlspecialchars($product['warranty']) ?></td>
+						<td></td>
+						<td></td>
 						<td class="edit-cell">
-							<button onclick="openUpdateForm('<?= $product['id'] ?>')" class="edit">
-								<i class="fa-solid fa-gear" style="color: #ffffff;"></i>
-							</button>
-							<form action="includes/product_delete.inc.php" method="POST" >
-								<input type="hidden" name="id" value="<?= $product['id'] ?>">
-								<button type="submit" class="delete">
+							<form action="#" method="POST" >
+								<button name="submit" class="edit">
+									<i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+								</button>
+							</form>
+							<form action="#" method="POST">
+								<button name="submit" class="delete">
 									<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
 								</button>
 							</form>
+
+							<!-- <form action="#" method="POST" >
+								<button name="submit" value="<?php echo $row["#"]; ?>"  id="edit">
+									<i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+								</button>
+							</form>
+							<form action="#" method="POST">
+								<button name="submit" value="<?php echo $row["#"]; ?>" class="delete">
+									<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+								</button>
+							</form> -->
 						</td>
 					</tr>
-					<?php endforeach; ?>
 				</table>
 			</div>
-		<div id="myModal" class="modal">
-			<div class="modal-content">
-				<span class="close" onclick="closeModal()">&times;</span>
-				<form id="updateForm" action="includes/product_update.inc.php" method="post">
-					<input type="hidden" name="id" id="id">
-					<input type="text" name="label" id="label" placeholder="New label">
-					<input type="text" name="product_description" placeholder="New Description">
-					<input type="text" name="warranty" id="warranty" placeholder="New Warranty">
-					<button type="submit">Update Product</button>
-				</form>
-			</div>	
-		</div>
 		</div>
 </body>
 </html>

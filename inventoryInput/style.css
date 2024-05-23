@@ -2,6 +2,16 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Micro+5&display=swap");
 
+.content-header {
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+
+.content-header span {	
+	flex-grow: 1;
+}
+
 .content-header span::before {
 	content: "";
 	background: url("https://img.icons8.com/?size=100&id=115272&format=png&color=000000") no-repeat;
@@ -15,7 +25,6 @@
 .content-header p {
 	font-size: 18px;
 	font-weight: 500;
-	float: right;
 	margin-right: 3rem;
 }
 

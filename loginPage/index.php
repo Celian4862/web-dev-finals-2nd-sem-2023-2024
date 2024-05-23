@@ -1,3 +1,7 @@
+<?php
+    require_once 'includes/login_view.inc.php';
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login Page</title>
         <link rel="stylesheet" type="text/css" href="style.css">
-        <script defer src="login.js" type="text/javascript"></script>
+        <script defer src="script.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="login-container">
@@ -16,14 +20,14 @@
             </div>
             <h1>N2N SOLUTIONS</h1>
             <div class="form-container">
-                <form id="loginForm" action="login.php" method="post">
+                <form id="loginForm" action="includes/login.inc.php" method="post">
                     <div>
-                        <label for="username" id="email">Email</label>
-                        <input type="text" id="username" name="username" placeholder="Email" required>
+                        <label for="email" id="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Email" required>
                     </div>
                     <div>
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Password" required>
+                        <input type="password" id="pwd" name="pwd" placeholder="Password" required>
                     </div>
                     <div class="row">
                         <div>
@@ -31,12 +35,14 @@
                             <label for="rememberMe">Stay signed in</label>
                         </div>
                         <div class="align-right">
-                            <button>Login</button>
+                            <button type="submit">Login</button>
                         </div>
                     </div>
                 </form>
             </div>
-            <p id="error"></p>
+            <?php
+                check_login_errors();
+            ?>
         </div>
     </body>
 </html>

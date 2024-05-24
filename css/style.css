@@ -14,6 +14,20 @@ img {
     position: fixed;
 }
 
+.container {
+	background-color: #EDF0F5;
+	display: grid;
+	grid-template-columns: 20% 80%;
+	filter: brightness(100%);
+	transition: 200ms;
+}
+
+.container.active {
+	filter: brightness(40%);
+	transition: 200ms;
+	pointer-events: none;
+	user-select: none;
+}
 /* --- navbar --- */
 
 .tabs button {
@@ -59,12 +73,6 @@ button.return {
 	cursor: pointer;
 	text-align: left;
 	width: min-content;
-}
-
-.container {
-	background-color: #EDF0F5;
-	display: grid;
-	grid-template-columns: 20% 80%;
 }
 
 .navbar {

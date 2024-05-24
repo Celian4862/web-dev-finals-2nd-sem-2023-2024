@@ -19,7 +19,6 @@ try {
 	<link rel="stylesheet" type="text/css" href="../css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="../inventory/style.css"/>
 	<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
-	<script src="script.js"></script>
 </head>
 <body class="container">
 	<div class="navbar">
@@ -29,7 +28,7 @@ try {
 			</div>
 		</div>
 		<div class="tabs">
-			<button onclick="dashboard_link()">
+		<button onclick="dashboard_link()">
 				<script>
 					function dashboard_link() {
 						location.href = "../dashboard/index.html";
@@ -41,7 +40,7 @@ try {
 			<button onclick="user_link()">
 				<script>
 					function user_link() {
-						location.href = "../userInput/userInput.php";
+						location.href = "../userInput/index.php";
 					}
 				</script>
 				<i class="fa-solid fa-user" style="color: #ffffff;"></i>
@@ -110,12 +109,11 @@ try {
 						<td><?= htmlspecialchars($product['product_description']) ?></td>
 						<td><?= htmlspecialchars($product['warranty']) ?></td>
 						<td class="edit-cell">
-							<button onclick="openUpdateForm('<?= $product['id'] ?>')" class="edit">
+							<button name="submit" class="edit" onclick="showPopup()">
 								<i class="fa-solid fa-gear" style="color: #ffffff;"></i>
 							</button>
-							<form action="includes/product_delete.inc.php" method="POST" >
-								<input type="hidden" name="id" value="<?= $product['id'] ?>">
-								<button type="submit" class="delete">
+							<form action="#" method="POST">
+								<button name="submit" class="delete">
 									<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
 								</button>
 							</form>
@@ -137,6 +135,7 @@ try {
 			</div>	
 		</div>
 		</div>
+	</div>
 </body>
 </html>
 

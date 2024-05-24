@@ -1,10 +1,12 @@
 function openUpdateForm(id) {
     document.getElementById('id').value = id;
-    document.getElementById('myModal').style.display = 'block';
 }
 
-function closeUpdateForm() {
-    document.getElementById('myModal').style.display = 'none';
+function toggle() {
+	var popup = document.getElementById("myModal")
+	var dark = document.getElementById("brightness")
+	popup.classList.toggle("active")
+	dark.classList.toggle("active")
 }
 
 //this is only for products

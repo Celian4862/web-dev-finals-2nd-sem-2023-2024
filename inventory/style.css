@@ -80,8 +80,7 @@
 }
 
 .popup {
-	display: none;
-	width: 500px;
+	width: 400px;
 	background-color: #fff;
 	border-radius: 8px;
 	position: absolute;
@@ -89,8 +88,53 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
-	padding: 20px;
+	padding: 10px;
 	z-index: 100;
+	visibility: hidden;
+	opacity: 0;
+	transition: 200ms;
+}
+
+.popup.active {
+	visibility: visible;
+	opacity: 1;
+	transition: 200ms;
+}
+
+.popup form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.popup input {
+	align-self: center;
+	padding: 5px;
+	border-radius: 5px;
+	border-style: solid;
+	border-color: #dcdcdc;
+	border-width: 2px;
+	width: 50%;
+}
+
+.popup h1 {
+	text-align: center;
+}
+
+.popup button {
+	align-self: center;
+	margin: 10px 0 10px 0;
+	border-radius: 5px;
+	border-style: none;
+	background-color: #406191;
+	color: #fff;
+	font-size: 16px;
+	font-weight: 500;
+	cursor: pointer;
+	outline: none;
+	width: 100px;
+	height: 30px;
+	cursor: pointer;
 }
 
 table {

@@ -19,7 +19,6 @@ try {
 	<link rel="stylesheet" type="text/css" href="../css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="../inventory/style.css"/>
 	<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
-	<script src="../js/script.js"></script>
 </head>
 <body class="container">
 	<div class="navbar">
@@ -29,7 +28,7 @@ try {
 			</div>
 		</div>
 		<div class="tabs">
-			<button onclick="dashboard_link()">
+		<button onclick="dashboard_link()">
 				<script>
 					function dashboard_link() {
 						location.href = "../dashboard/index.html";
@@ -41,7 +40,7 @@ try {
 			<button onclick="user_link()">
 				<script>
 					function user_link() {
-						location.href = "../userInput/userInput.php";
+						location.href = "../userInput/index.php";
 					}
 				</script>
 				<i class="fa-solid fa-user" style="color: #ffffff;"></i>

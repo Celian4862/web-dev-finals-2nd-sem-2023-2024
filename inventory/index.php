@@ -19,6 +19,7 @@ try {
 	<link rel="stylesheet" type="text/css" href="../css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="../inventory/style.css"/>
 	<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
+	<script src="../js/script.js" defer></script>
 </head>
 <body class="container">
 	<div class="navbar">
@@ -28,7 +29,7 @@ try {
 			</div>
 		</div>
 		<div class="tabs">
-		<button onclick="dashboard_link()">
+			<button onclick="dashboard_link()">
 				<script>
 					function dashboard_link() {
 						location.href = "../dashboard/index.html";
@@ -40,7 +41,7 @@ try {
 			<button onclick="user_link()">
 				<script>
 					function user_link() {
-						location.href = "../userInput/index.php";
+						location.href = "../users/index.php";
 					}
 				</script>
 				<i class="fa-solid fa-user" style="color: #ffffff;"></i>
@@ -87,7 +88,6 @@ try {
 						Add Item
 					</button>
 				</div>
-				<!-- TODO: ADD ARROWS FOR TABS (i'll do this tomorrow plz) -->
 				<div class="arrows">
 					<a href=""><i class="fa-solid fa-arrow-left fa-xl"></i></a>
 					<a href=""><i class="fa-solid fa-arrow-right fa-xl"></i></a>
@@ -109,11 +109,12 @@ try {
 						<td><?= htmlspecialchars($product['product_description']) ?></td>
 						<td><?= htmlspecialchars($product['warranty']) ?></td>
 						<td class="edit-cell">
-							<button name="submit" class="edit" onclick="showPopup()">
+							<button onclick="openUpdateForm('<?= $product['id'] ?>')" class="edit">
 								<i class="fa-solid fa-gear" style="color: #ffffff;"></i>
 							</button>
-							<form action="#" method="POST">
-								<button name="submit" class="delete">
+							<form action="includes/product_delete.inc.php" method="POST" >
+								<input type="hidden" name="id" value="<?= $product['id'] ?>">
+								<button type="submit" class="delete">
 									<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
 								</button>
 							</form>
@@ -124,7 +125,7 @@ try {
 			</div>
 		<div id="myModal" class="modal">
 			<div class="modal-content">
-				<span class="close" onclick="closeModal()">&times;</span>
+				<span class="close" onclick="closeUpdateForm()">&times;</span>
 				<form id="updateForm" action="includes/product_update.inc.php" method="post">
 					<input type="hidden" name="id" id="id">
 					<input type="text" name="label" id="label" placeholder="New label">
@@ -135,7 +136,6 @@ try {
 			</div>	
 		</div>
 		</div>
-	</div>
 </body>
 </html>
 

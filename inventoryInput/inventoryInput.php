@@ -65,7 +65,7 @@
 			<div class="header"></div>
 			<div class="content-header">
 				<span>Add new item</span>
-				<a href=""><p>Back to list</p></a>
+				<a href="../inventory/index.php"><p>Back to list</p></a>
 			</div>
 			<div class="box-container">
 				<form class="form-container" action="includes/formhandler.inc.php" method="post">

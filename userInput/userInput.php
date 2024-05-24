@@ -33,7 +33,7 @@
 				<button onclick="inventory_link()">
 					<script>
 						function inventory_link() {
-							location.href = "../inventory/index.html";
+							location.href = "../inventory/index.php";
 						}
 					</script>
 					<i class="fa-solid fa-dolly" style="color: #ffffff;"></i>
@@ -66,7 +66,7 @@
 			<div class="header"></div>
 			<div class="content-header">
 				<span>Add new user</span>
-				<a href=""><p>Back to list</p></a>
+				<a href="../users/index.php"><p>Back to list</p></a>
 			</div>
 			<div class="box-container">
 			<form class="form-container" action="includes/formhandler.inc.php" method="post">

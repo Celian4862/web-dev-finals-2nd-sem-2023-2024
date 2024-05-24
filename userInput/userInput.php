@@ -3,9 +3,10 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Inventory - Input</title>
+		<title>Users - Input</title>
 		<link rel="stylesheet" type="text/css" href="../css/style.css" />
-		<link rel="stylesheet" type="text/css" href="../inventoryInput/style.css" />
+		<link rel="stylesheet" type="text/css" href="../userInput/style.css" />
+		<script defer src="userInput.js" type="text/javascript"></script>
 		<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
 	</head>
 	<body class="container">
@@ -16,23 +17,43 @@
 				</div>
 			</div>
 			<div class="tabs">
-				<button>
+				<button onclick="dashboard_link()">
+					<script>
+						function dashboard_link() {
+							location.href = "../dashboard/index.html";
+						}
+					</script>
 					<i class="fa-solid fa-table-columns" style="color: #ffffff;"></i>
 					<span>Dashboard</span>
 				</button>
-				<button>
+				<button class="active">
 					<i class="fa-solid fa-user" style="color: #ffffff;"></i>
 					<span>User</span>
 				</button>
-				<button class="active">
+				<button onclick="inventory_link()">
+					<script>
+						function inventory_link() {
+							location.href = "../inventory/index.html";
+						}
+					</script>
 					<i class="fa-solid fa-dolly" style="color: #ffffff;"></i>
 					<span>Inventory</span>
 				</button>
-				<button>
+				<button onclick="shipment_link()">
+					<script>
+						function shipment_link() {
+							location.href = "../Shipments/index.html";
+						}
+					</script>
 					<i class="fa-solid fa-truck" style="color: #ffffff;"></i>
 					<span>Shipments</span>
 				</button>
-				<button>
+				<button onclick="reception_link()">
+					<script>
+						function reception_link() {
+							location.href = "../receptions/index.html";
+						}
+					</script>
 					<i class="fa-solid fa-truck-ramp-box" style="color: #ffffff;"></i>
 					<span>Reception</span>
 				</button>
@@ -44,24 +65,20 @@
 		<div class="content-container">
 			<div class="header"></div>
 			<div class="content-header">
-				<span>Add new item</span>
+				<span>Add new user</span>
 				<a href=""><p>Back to list</p></a>
 			</div>
 			<div class="box-container">
-				<form class="form-container">
+			<form class="form-container" action="includes/formhandler.inc.php" method="post">
 					<div class="form-group">
-						<label for="product-label">Product Label</label>
-						<input type="text" id="product-label" name="product-label" placeholder="Product label" required/>
+						<label for="email">Email</label>
+						<input type="email" id="email" name="email" placeholder="Email" required/>
 					</div>
 					<div class="form-group">
-						<label for="description">Description</label>
-						<textarea id="description" name="description" placeholder="Description" required></textarea>
+						<label for="password">Password</label>
+						<input type="password" id="password" name="pwd" placeholder="Password" required />
 					</div>
-					<div class="form-group">
-						<label for="warranty">Warranty</label>
-						<input type="text" id="warranty" name="warranty" placeholder="Warranty" required />
-					</div>
-					<button>Add item</button>
+					<button>Add user</button>
 				</form>
 			</div>
 		</div>

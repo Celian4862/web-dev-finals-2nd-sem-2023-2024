@@ -3,9 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Shipments</title>
+	<title>Receptions</title>
 	<link rel="stylesheet" type="text/css" href="../css/style.css"/>
-	<link rel="stylesheet" type="text/css" href="../Shipments/style.css"/>
+	<link rel="stylesheet" type="text/css" href="../Receptions/style.css"/>
 	<script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
 </head>
 <body class="container">
@@ -45,7 +45,7 @@
 			</button>
 			<button class="active">
 				<i class="fa-solid fa-truck" style="color: #ffffff;"></i>
-				<span>Shipments</span>
+				<span>Shipment</span>
 			</button>
 			<button onclick="reception_link()">
 				<script>
@@ -57,7 +57,12 @@
 				<span>Reception</span>
 			</button>
 		</div>
-		<button class="return">
+		<button class="return" onclick="logout_link()">
+			<script>
+				function logout_link() {
+					location.href = "../loginPage/index.php";
+				}
+			</script>
 			<span class="fa-solid fa-arrow-right-to-bracket fa-2xl"></span>
 		</button>
 	</div>

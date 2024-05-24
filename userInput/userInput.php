@@ -58,8 +58,13 @@
 					<span>Reception</span>
 				</button>
 			</div>
-			<button class="return">
-				<span class="fa-solid fa-arrow-right-to-bracket fa-2xl"></span>
+			<button class="return" onclick="logout_link()">
+			<script>
+				function logout_link() {
+					location.href = "../loginPage/index.php";
+				}
+			</script>
+			<span class="fa-solid fa-arrow-right-to-bracket fa-2xl"></span>
 			</button>
 		</div>
 		<div class="content-container">

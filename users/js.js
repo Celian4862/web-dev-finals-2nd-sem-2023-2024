@@ -1,11 +1,14 @@
 function openUpdateForm(id, email) {
-    document.getElementById('id').value = id;
-    document.getElementById('email').value = email;
-    document.getElementById('myModal').style.display = 'block';
+    document.getElementById('id').value = id
+    document.getElementById('email').value = email
+    // document.getElementById('myModal').style.display = 'block'
 }
 
-function closeUpdateForm() {
-    document.getElementById('myModal').style.display = 'none';
-}
+console.log('test')
 
-//this is only for users
+function toggle() {
+    var popup = document.getElementById("myModal")
+    var dark = document.getElementById("brightness")
+    popup.classList.toggle("active")
+    dark.classList.toggle("active")
+}

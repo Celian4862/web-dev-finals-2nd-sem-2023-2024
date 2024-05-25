@@ -19,6 +19,7 @@ try {
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <script src="https://kit.fontawesome.com/f3364d5594.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
 </head>
 <body>
     <div class="container" id="brightness">
@@ -83,7 +84,7 @@ try {
             <div class="header"></div>
             <div class="content-header">
                 <span>User</span>
-                <div>
+                <div class="button-container">
                     <button onclick="userInput_link()">
                         <script>
                             function userInput_link() {
@@ -107,11 +108,11 @@ try {
                         <th>Edit</th>
                     </tr>
                     <?php foreach ($users as $user): ?>
-                    <tr>
+                    <tr class="table-content">
                         <td><?= htmlspecialchars($user['id']) ?></td>
                         <td><?= htmlspecialchars($user['email']) ?></td>
                         <td class="edit-cell">
-                            <button onclick="openUpdateForm('<?= $user['id'] ?>', '<?= htmlspecialchars($user['email'], ENT_QUOTES) ?>')" class="edit">
+                            <button onclick="openUpdateForm('<?= $user['id'] ?>', '<?= htmlspecialchars($user['email'], ENT_QUOTES) ?>'); toggle()" class="edit">
                                 <i class="fa-solid fa-gear" style="color: #ffffff;"></i>
                             </button>
                             <form action="includes/user_delete.inc.php" method="POST">
@@ -125,20 +126,20 @@ try {
                     <?php endforeach; ?>
                 </table>
 
-                <div id="myModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="closeUpdateForm()">&times;</span>
-                        <form id="updateForm" action="includes/user_update.inc.php" method="post">
-                            <input type="hidden" name="id" id="id">
-                            <input type="email" name="email" id="email" placeholder="New Email">
-                            <input type="password" name="pwd" placeholder="New Password">
-                            <button type="submit">Update User</button>
-                        </form>
-                    </div>    
-                </div>
             </div>
         </div>
     </div>
-    <script src="js.js"></script>
+    <div class="modal-content" id="myModal">
+        <div class="modal-header">
+            <h1>Edit</h1>
+            <span class="close" onclick="toggle()">&times;</span>
+        </div>
+        <form id="updateForm" action="includes/user_update.inc.php" method="post">
+            <input type="hidden" name="id" id="id">
+            <input type="email" name="email" id="email" placeholder="Email">
+            <input type="password" name="pwd" placeholder="Password">
+            <button type="submit" onclick="toggle()">Update</button>
+        </form>
+    </div>    
 </body>
 </html>

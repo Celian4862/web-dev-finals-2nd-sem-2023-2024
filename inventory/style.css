@@ -49,10 +49,6 @@
 	transition: 200ms;
 }
 
-.button-container {
-	flex-grow: 1;
-}
-
 .add-item {
 	flex-grow: 1;
 }
@@ -83,9 +79,7 @@
 	justify-content: space-evenly;
 }
 
-/* --- Popup Box --- */
-
-.modal-content {
+.popup {
 	width: 400px;
 	background-color: #fff;
 	border-radius: 8px;
@@ -101,31 +95,19 @@
 	transition: 200ms;
 }
 
-.modal-content.active {
+.popup.active {
 	visibility: visible;
 	opacity: 1;
 	transition: 200ms;
 }
 
-.modal-header {
-	display: flex;
-	justify-content: center;
-}
-
-.modal-header span {
-	position: absolute;
-	right: 20px;
-	top: 10px;
-
-}
-
-.modal-content form {
+.popup form {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
 }
 
-.modal-content input {
+.popup input {
 	align-self: center;
 	padding: 5px;
 	border-radius: 5px;
@@ -135,11 +117,11 @@
 	width: 50%;
 }
 
-.modal-content h1 {
+.popup h1 {
 	text-align: center;
 }
 
-.modal-content button {
+.popup button {
 	align-self: center;
 	margin: 10px 0 10px 0;
 	border-radius: 5px;
@@ -155,19 +137,6 @@
 	cursor: pointer;
 }
 
-.close {
-	color: #aaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-}
-.close:hover,
-.close:focus {
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
-}
-
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -179,16 +148,6 @@ tr.table-header {
 	border-color: #dcdcdc;
 	border-style: solid;
 	border-width: 0 0 1px 0;
-}
-
-tr.table-content {
-	border-color: #dcdcdc;
-	border-style: solid;
-	border-width: 0 0 1px 0;
-}
-
-tr.table-content:nth-of-type(odd) {
-	background-color: #F9F9F9;
 }
 
 th {
@@ -252,4 +211,38 @@ button.delete:hover {
 .content-header button:hover {
 	background-color: #36527c;
 	transition: 200ms;
+}
+
+/*My modal css*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

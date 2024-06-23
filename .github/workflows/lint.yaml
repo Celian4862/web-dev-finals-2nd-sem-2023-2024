@@ -38,7 +38,7 @@ jobs:
 
             - name: Run PHPStan
               run: |
-                  phpstan analyse web
+                  composer lint:stan
 
             - name: Run Lint Css
               run: |

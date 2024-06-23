@@ -22,7 +22,7 @@ class Surreal
     public function connect(string $host, ?array $target = null): void
     {
         curl_setopt($this->engine, CURLOPT_URL, $host . "/sql");
-        // curl_setopt($this->engine, CURLOPT_TIMEOUT, 2);
+        curl_setopt($this->engine, CURLOPT_TIMEOUT, 2);
         curl_setopt($this->engine, CURLOPT_RETURNTRANSFER, true);
 
         if ($target) {

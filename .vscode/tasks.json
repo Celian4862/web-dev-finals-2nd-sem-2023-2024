@@ -61,9 +61,9 @@
 			"args": [
 				"tailwindcss",
 				"-i",
-				"./web/input.css",
+				"./web/public/input.css",
 				"-o",
-				"./web/styles.css",
+				"./web/public/styles.css",
 				"--watch"
 			]
 		}

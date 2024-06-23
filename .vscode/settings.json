@@ -1,5 +1,5 @@
 {
 	"intelephense.environment.documentRoot": "./web/public",
 	"intelephense.environment.phpVersion": "8.3.8",
-	"editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+	"editor.detectIndentation": false
 }

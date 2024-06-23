@@ -18,9 +18,9 @@ $pagePath = WEB_PATH . "/pages$urlPath";
 <body class="font-roboto">
 	<?php
 	if (file_exists($pagePath . "/index.php")) {
-		require_once $pagePath . "/index.php";
+		include_once $pagePath . "/index.php";
 	} else if (file_exists($pagePath . ".php")) {
-		require_once $pagePath . ".php";
+		include_once $pagePath . ".php";
 	} else {
 		http_response_code(404);
 		echo "404 Not Found";

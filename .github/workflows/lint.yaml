@@ -22,4 +22,4 @@ jobs:
 
     - name: Run PHP_CodeSniffer
       run: |
-        phpcs --standard=PSR12 /path/to/your/php/files
+        phpcs --standard=PSR12 /web

@@ -1,0 +1,71 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Serve",
+			"type": "process",
+			"dependsOn": ["Serve: SurrealDB", "Serve: PHP", "Dev: Tailwind"],
+			"icon": {
+				"id": "server-process",
+				"color": "terminal.ansiGreen"
+			},
+			"problemMatcher": [],
+			"command": "echo",
+			"args": ["Serving on http://localhost:3000/"]
+		},
+		{
+			"label": "Serve: SurrealDB",
+			"type": "shell",
+			"isBackground": true,
+			"icon": {
+				"id": "database",
+				"color": "terminal.ansiRed"
+			},
+			"presentation": {
+				"group": "serve"
+			},
+			"problemMatcher": [],
+			"options": {
+				"cwd": "${workspaceFolder}/database"
+			},
+			"command": "./serve.sh"
+		},
+		{
+			"label": "Serve: PHP",
+			"type": "shell",
+			"isBackground": true,
+			"icon": {
+				"id": "server",
+				"color": "terminal.ansiYellow"
+			},
+			"options": {
+				"cwd": "${workspaceFolder}/web/public"
+			},
+			"presentation": {
+				"group": "serve"
+			},
+			"problemMatcher": [],
+			"command": "php",
+			"args": ["-S", "localhost:3000", "-f", "index.php"]
+		},
+		{
+			"label": "Dev: Tailwind",
+			"type": "shell",
+			"isBackground": true,
+			"icon": {
+				"id": "sparkle",
+				"color": "terminal.ansiCyan"
+			},
+			"problemMatcher": [],
+			"command": "npx",
+			"args": [
+				"tailwindcss",
+				"-i",
+				"./web/input.css",
+				"-o",
+				"./web/styles.css",
+				"--watch"
+			]
+		}
+	]
+}

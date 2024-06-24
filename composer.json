@@ -18,7 +18,7 @@
 			"@lint:stan",
 			"npm run lint:css"
 		],
-		"lint:cs": "vendor/bin/phpcs --standard=PSR12 --ignore=*web/components/views/*, *web/pages/**/index.php* web",
+		"lint:cs": "vendor/bin/phpcs --standard=PSR12 --ignore=*web/components/views/*,*web/pages/**/index.php*,*web/**/*.css* web",
 		"lint:md": "vendor/bin/phpmd web text codesize,unusedcode",
 		"lint:stan": "vendor/bin/phpstan analyse web",
 		"fix:cbf": "vendor/bin/phpcbf --standard=PSR12 web"

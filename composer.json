@@ -3,6 +3,7 @@
 	"type": "project",
 	"autoload": {
 		"psr-4": {
+			"Components\\": "web/components/",
 			"Utilities\\": "web/utilities/",
 			"Services\\": "web/services/"
 		},
@@ -14,9 +15,10 @@
 		"lint": [
 			"@lint:cs",
 			"@lint:md",
-			"@lint:stan"
+			"@lint:stan",
+			"npm run lint:css"
 		],
-		"lint:cs": "vendor/bin/phpcs --standard=PSR12 web",
+		"lint:cs": "vendor/bin/phpcs --standard=PSR12 --ignore=*web/components/views/*, *web/pages/**/index.php* web",
 		"lint:md": "vendor/bin/phpmd web text codesize,unusedcode",
 		"lint:stan": "vendor/bin/phpstan analyse web",
 		"fix:cbf": "vendor/bin/phpcbf --standard=PSR12 web"

@@ -1,13 +1,5 @@
 {
 	"useTabs": true,
 	"tabWidth": 4,
-	"semi": true,
-	"overrides": [
-		{
-			"files": ["web/**/*.css"],
-			"options": {
-				"useTabs": false
-			}
-		}
-	]
+	"semi": true
 }

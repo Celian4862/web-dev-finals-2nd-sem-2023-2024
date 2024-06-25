@@ -4,3 +4,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	.login-input {
+		@apply p-2 rounded-md outline-none text-black ring-gray-300 hover:ring focus:ring transition-colors shadow-md data-[error="true"]:ring-red-400 data-[error="true"]:ring;
+	}
+
+	.login-checkbox {
+		@apply relative appearance-none w-5 h-5 border rounded outline-none ring-gray-300 hover:ring focus:ring after:absolute after:w-full after:h-full after:bg-center checked:after:bg-[url(/assets/check.svg)];
+	}
+
+	.login-submit {
+		@apply px-4 py-2 rounded-md outline-none bg-green-500 ring-green-500 font-bold hover:bg-green-600 hover:ring focus:bg-green-600 focus:ring transition-colors shadow-md;
+	}
+
+	.sidebar-button {
+		@apply flex items-center gap-2 p-1 rounded-md outline-none ring-[#5273a1] hover:bg-[#365178] hover:ring focus:bg-[#365178] focus:ring data-[active="true"]:bg-[#365178] transition-colors;
+	}
+}

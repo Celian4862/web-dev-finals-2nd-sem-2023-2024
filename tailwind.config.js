@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ["./web/pages/**/*.php", "./components/views/**/*.php"],
+	content: ["./web/pages/**/*.php", "./web/**/views/**/*.php"],
 	theme: {
 		extend: {
 			backgroundColor: {
@@ -12,9 +12,6 @@ module.exports = {
 			fontFamily: {
 				logo: ["Protest Guerrilla"],
 				roboto: ["Roboto, sans-serif"],
-			},
-			backgroundImage: {
-				building: "url(/assets/building.jpg)",
 			},
 		},
 	},

@@ -2,6 +2,8 @@
 
 namespace Utilities;
 
+use function Utilities\getDatabase;
+
 class Employee
 {
     public readonly string $id;
@@ -22,7 +24,7 @@ class Employee
     /** Creates a new employee object if the credentails are correct. */
     public static function login(string $email, string $password): self|string
     {
-        require_once "../utilities/db.php";
+        $db = getDatabase();
 
         $employee = $db->query("SELECT * FROM ONLY employee WHERE email = '$email' LIMIT 1");
 
@@ -35,6 +37,7 @@ class Employee
         }
 
         $db->disconnect();
+
         return new Employee($employee);
     }
 }

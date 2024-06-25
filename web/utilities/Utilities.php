@@ -2,25 +2,47 @@
 
 namespace Utilities;
 
+use Utilities\Surreal;
+
+/** Get the surreal database connection. */
+function getDatabase(): Surreal
+{
+    $db = new Surreal();
+
+    $db->connect(
+        "http://localhost:8000",
+        [
+            "namespace" => "n2n",
+            "database" => "n2n",
+        ]
+    );
+
+    $db->signin(
+        [
+            "user" => "admin",
+            "pass" => "admin",
+        ]
+    );
+
+    return $db;
+}
+
 /** Redirects the user to the specified path. */
-function Redirect(string $path): void
+function redirect(string $path): void
 {
     header("Location: $path");
     exit;
 }
 
 /** Print an array in a readable format. */
-function PrintArray(array $arr): void
+function printArray(array $arr): void
 {
-    echo "<ul style='list-style-type: disc; padding: revert' class='list-disc'>";
-    foreach ($arr as $key => $val) {
-        if (is_array($val)) {
-            echo "<li><span>" . $key . "</span><b> => </b><span>";
-            PrintArray($val);
-            echo "</span></li>";
-        } else {
-            echo "<li><span>" . $key . "</span><b> => </b><span>" . $val . "</span></li>";
-        }
-    }
-    echo "</ul>";
+    include __DIR__ . "/views/print-array.php";
+    unset($arr);
+}
+
+/** Get the path of the current URL. */
+function getURLPath(): string
+{
+    return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 }

@@ -15,7 +15,8 @@ $pagePath = BASE_PATH . "/pages$urlPath";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N2N Solutions</title>
-    <link type="text/css" rel="stylesheet" href="/styles.css">
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght,FILL@300,1" />
+    <link type="text/css" rel="stylesheet" href="/styles.css" />
 </head>
 
 <body class="font-roboto">

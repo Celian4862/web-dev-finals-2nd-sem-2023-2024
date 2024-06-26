@@ -29,10 +29,13 @@ $previousEmail = $_SESSION["previous"]["email"] ?? "";
                 <?php endif; ?>
             </div>
             <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <input type="checkbox" id="remember" name="remember" class="login-checkbox">
-                    <label for="remember" class="ml-2">Remember me</label>
-                </div>
+                <label for="remember" class="flex items-center gap-2">
+                    <div class="login-checkbox">
+                        <input type="checkbox" id="remember" name="remember">
+                        <i class="material-symbols-rounded">check</i>
+                    </div>
+                    <span>Remember me</span>
+                </label>
                 <button type="submit" class="login-submit">Login</button>
             </div>
         </form>

@@ -34,11 +34,11 @@ function redirect(string $path): void
     exit;
 }
 
-/** Print an array in a readable format. */
-function printArray(array $arr): void
+/** Print the data in a readable format on the console. */
+function debug(array $data): void
 {
-    include __DIR__ . "/views/print-array.php";
-    unset($arr);
+    include __DIR__ . "/views/debug.php";
+    unset($data);
 }
 
 /** Get the path of the current URL. */

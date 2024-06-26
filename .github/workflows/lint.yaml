@@ -40,6 +40,6 @@ jobs:
               run: |
                   composer lint:stan
 
-            - name: Run Lint Css
+            - name: Run Prettier
               run: |
-                  npm run lint:css
+                  npm run lint:prettier

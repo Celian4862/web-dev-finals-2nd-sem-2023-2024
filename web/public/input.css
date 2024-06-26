@@ -11,7 +11,19 @@
 	}
 
 	.login-checkbox {
-		@apply relative appearance-none w-5 h-5 border rounded outline-none ring-gray-300 hover:ring focus:ring after:absolute after:w-full after:h-full after:bg-center checked:after:bg-[url(/assets/check.svg)];
+		@apply relative flex items-center;
+	}
+
+	.login-checkbox input {
+		@apply appearance-none w-5 h-5 border rounded outline-none ring-gray-300 hover:ring focus:ring;
+	}
+
+	.login-checkbox i {
+		@apply absolute opacity-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+	}
+
+	.login-checkbox input:checked + i {
+		@apply opacity-100;
 	}
 
 	.login-submit {

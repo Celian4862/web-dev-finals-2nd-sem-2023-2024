@@ -5,14 +5,17 @@ A project proposal for the **N2N Solutions** Company to help with *inventory man
 ## Features
 
 ### 1. Remote Accessibility
+
 - Employees can access and manage inventory information from any location, ensuring operational efficiency.
 
 ### 2. Customizable Permissions
+
 - Administrators can set customizable permissions to control user access levels.
 - Logging for administrators for tracking the employees activity.
 - Sensitive inventory data is accessible only to authorized personnel, enhancing data protection and confidentiality.
 
 ### 3. Efficient Inventory Tracking
+
 - Users can monitor inventory stock in real-time.
 - Manage product information with ease.
 - Generate comprehensive reports as needed to facilitate accurate and up-to-date inventory management.

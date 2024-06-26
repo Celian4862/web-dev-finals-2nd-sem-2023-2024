@@ -16,7 +16,7 @@
 			"@lint:cs",
 			"@lint:md",
 			"@lint:stan",
-			"npm run lint:css"
+			"npm run lint"
 		],
 		"lint:cs": "vendor/bin/phpcs --standard=PSR12 --ignore=*web/public/index.php*,*web/**/views/*,*web/pages/**/index.php*,*web/**/*.css* web",
 		"lint:md": "vendor/bin/phpmd web text codesize,unusedcode",

@@ -6,6 +6,6 @@ class Sidebar
 {
     public static function render()
     {
-        require __DIR__ . "/views/sidebar.php";
+        include __DIR__ . "/views/sidebar.php";
     }
 }

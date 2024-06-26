@@ -2,7 +2,7 @@
 
 session_start();
 
-use function Utilities\printArray;
+use function Utilities\debug;
 
 use Components\Sidebar;
 ?>
@@ -10,6 +10,6 @@ use Components\Sidebar;
 <div class="flex">
     <?php
     Sidebar::render();
-    printArray((array) $_SESSION["employee"]);
+    debug((array) $_SESSION["employee"]);
     ?>
 </div>

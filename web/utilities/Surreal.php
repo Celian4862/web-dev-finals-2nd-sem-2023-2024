@@ -16,9 +16,7 @@ class Surreal
         $this->target = ["Accept: application/json"];
     }
 
-    /**
-     * Connect to the remote Surreal database.
-     */
+    /** * Connect to the remote Surreal database. */
     public function connect(string $host, ?array $target = null): void
     {
         curl_setopt($this->engine, CURLOPT_URL, $host . "/sql");
@@ -30,9 +28,7 @@ class Surreal
         }
     }
 
-    /**
-     * Signin with a root, namespace, database or scoped user.
-     */
+    /** * Signin with a root, namespace, database or scoped user. */
     public function signin(array $data): void
     {
         curl_setopt($this->engine, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -43,9 +39,7 @@ class Surreal
         );
     }
 
-    /**
-     * Use the given namespace and database for the following queries in the current open connection.
-     */
+    /** * Use the given namespace and database for the following queries in the current open connection. */
     public function use(array $target): void
     {
         if (isset($target["namespace"])) {
@@ -57,9 +51,7 @@ class Surreal
         }
     }
 
-    /**
-     * Query a raw SurrealQL query.
-     */
+    /** * Query a raw SurrealQL query. */
     public function query(string $query): array|null
     {
         curl_setopt($this->engine, CURLOPT_HTTPHEADER, $this->target);
@@ -81,9 +73,7 @@ class Surreal
         return end($response)["result"];
     }
 
-    /**
-     * Close the connection.
-     */
+    /** * Close the connection. */
     public function disconnect(): void
     {
         curl_close($this->engine);

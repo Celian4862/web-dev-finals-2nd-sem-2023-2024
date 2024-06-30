@@ -38,6 +38,7 @@ function redirect(string $path): void
 function debug(array $data): void
 {
     include __DIR__ . "/views/debug.php";
+
     unset($data);
 }
 

@@ -1,0 +1,13 @@
+{
+	// Editor
+	"editor.detectIndentation": false,
+
+	// Intelephense
+	"intelephense.environment.documentRoot": "./web/public",
+	"intelephense.environment.phpVersion": "8.3.8",
+
+	// Language Configuration
+	"[php]": {
+		"editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+	}
+}

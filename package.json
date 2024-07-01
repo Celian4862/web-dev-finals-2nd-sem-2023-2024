@@ -1,0 +1,14 @@
+{
+	"scripts": {
+		"tailwind": "npx tailwindcss -i ./web/public/input.css -o ./web/public/styles.css",
+		"lint": "npm run lint:prettier",
+		"lint:prettier": "prettier --check .",
+		"fix": "npm run fix:prettier",
+		"fix:prettier": "prettier --write ."
+	},
+	"devDependencies": {
+		"prettier": "^3.3.2",
+		"prettier-plugin-tailwindcss": "^0.6.5",
+		"tailwindcss": "^3.4.4"
+	}
+}

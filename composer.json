@@ -1,0 +1,31 @@
+{
+	"name": "n2n/n2n-solutions",
+	"type": "project",
+	"autoload": {
+		"psr-4": {
+			"Components\\": "web/components/",
+			"Utilities\\": "web/utilities/",
+			"Services\\": "web/services/"
+		},
+		"files": [
+			"web/utilities/Utilities.php"
+		]
+	},
+	"scripts": {
+		"lint": [
+			"@lint:cs",
+			"@lint:md",
+			"@lint:stan",
+			"npm run lint"
+		],
+		"lint:cs": "vendor/bin/phpcs --standard=PSR12 --ignore=*web/public/index.php*,*web/**/views/*,*web/pages/**/index.php*,*web/**/*.css* web",
+		"lint:md": "vendor/bin/phpmd web text codesize,unusedcode",
+		"lint:stan": "vendor/bin/phpstan analyse web",
+		"fix:cbf": "vendor/bin/phpcbf --standard=PSR12 web"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "*",
+		"phpmd/phpmd": "^2.15",
+		"phpstan/phpstan": "^1.11"
+	}
+}

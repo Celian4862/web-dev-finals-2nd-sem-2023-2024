@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	i.material-symbols-rounded {
+		@apply select-none;
+	}
+
+	.text-logo {
+		@apply select-none;
+	}
+
+	.login-input {
+		@apply rounded-md p-2 text-black shadow-md outline-none ring-gray-300 transition-colors hover:ring focus:ring data-[error="true"]:ring data-[error="true"]:ring-red-400;
+	}
+
+	.login-checkbox {
+		@apply relative flex items-center;
+	}
+
+	.login-checkbox input {
+		@apply h-5 w-5 appearance-none rounded border outline-none ring-gray-300 hover:ring focus:ring;
+	}
+
+	.login-checkbox i {
+		@apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0;
+	}
+
+	.login-checkbox input:checked + i {
+		@apply opacity-100;
+	}
+
+	.login-submit {
+		@apply rounded-md bg-green-500 px-4 py-2 font-bold shadow-md outline-none ring-green-500 transition-colors hover:bg-green-600 hover:ring focus:bg-green-600 focus:ring;
+	}
+
+	.sidebar-button {
+		@apply flex items-center gap-2 rounded-md p-1 outline-none ring-[#5273a1] transition-colors hover:bg-[#365178] hover:ring focus:bg-[#365178] focus:ring data-[active="true"]:bg-[#365178];
+	}
+
+	.dashboard-container {
+		@apply flex h-dvh w-full flex-col overflow-hidden bg-[#EDF0F5];
+	}
+
+	.dashboard-header {
+		@apply w-full border-b border-gray-300 bg-white px-4 py-2;
+	}
+
+	.dashboard-content {
+		@apply h-full w-full overflow-y-auto p-4;
+	}
+
+	.dashboard-table {
+		@apply h-full w-full overflow-y-auto rounded-md bg-white px-4 pb-4;
+	}
+
+	.dashboard-table table {
+		@apply w-full;
+	}
+
+	.dashboard-table table th {
+		@apply sticky top-0 bg-white p-4;
+	}
+
+	.dashboard-table table th:first-child {
+		@apply w-0 font-extrabold;
+	}
+
+	.dashboard-table table th:not(:first-child) {
+		@apply text-left;
+	}
+
+	.dashboard-table table td {
+		@apply border-b border-t border-gray-300 px-4 py-2;
+	}
+
+	.dashboard-table table td:first-child {
+		@apply text-center font-bold;
+	}
+
+	.dashboard-table table tr {
+		@apply even:bg-gray-100;
+	}
+}

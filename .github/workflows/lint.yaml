@@ -1,0 +1,45 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.3"
+
+            - name: Set up Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18"
+
+            - name: Install Composer Dependencies
+              run: |
+                  composer install
+
+            - name: Install Node Dependencies
+              run: |
+                  npm install
+
+            - name: Run PHP_CodeSniffer
+              run: |
+                  composer lint:cs
+
+            - name: Run PHPMD
+              run: |
+                  composer lint:md
+
+            - name: Run PHPStan
+              run: |
+                  composer lint:stan
+
+            - name: Run Prettier
+              run: |
+                  npm run lint:prettier

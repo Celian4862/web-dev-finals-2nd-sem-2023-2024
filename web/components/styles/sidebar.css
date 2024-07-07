@@ -1,0 +1,12 @@
+.sidebar-button {
+	@apply flex items-center gap-2 rounded-md p-1 ring-[#5273a1] transition-colors;
+
+	&[data-active="true"] {
+		@apply bg-[#365178];
+	}
+
+	&:hover,
+	&:focus {
+		@apply bg-[#365178] ring;
+	}
+}

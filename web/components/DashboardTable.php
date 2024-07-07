@@ -9,6 +9,7 @@ class DashboardTable
         array $elements,
         array $headers,
         callable $elementData,
+        bool $search = true,
         callable $headerStyle = null,
         callable $rowStyle = null,
     ): void {
@@ -16,8 +17,60 @@ class DashboardTable
 
         unset($elements);
         unset($headers);
+        unset($search);
         unset($elementData);
         unset($headerStyle);
         unset($rowStyle);
+    }
+
+    public static function getColumnQuery(array $query, array $headers, string $column): array
+    {
+        $columnQuery = $query;
+
+        foreach ($headers as $otherColumn) {
+            if ($column === $otherColumn) {
+                continue;
+            }
+
+            $columnQuery = array_diff_key($columnQuery, [str_replace(' ', '_', $otherColumn) => 1]);
+        }
+
+        return $columnQuery;
+    }
+
+    public static function getSearchMethod(array $query, array $headers): string|null
+    {
+        foreach ($headers as $header => $column) {
+            $header = str_replace(' ', '_', $header);
+
+            if (isset($query["search"][$header]) && $query["search"][$header]) {
+                return <<<SQL
+                WHERE
+                    string::lowercase(
+                        string::concat($column)
+                    )
+                    CONTAINS
+                    string::lowercase('{$query["search"][$header]}')
+                SQL;
+            }
+        }
+
+        return null;
+    }
+
+    public static function getSortMethod(array $query, array $headers): string
+    {
+        foreach ($headers as $header => $column) {
+            $header = str_replace(' ', '_', $header);
+
+            if (isset($query[$header])) {
+                return implode(" ", ["ORDER BY $column", match ($query[$header]) {
+                    "1" => "ASC",
+                    default => "DESC"
+                }]);
+            }
+        }
+
+        return "ORDER BY createdAt DESC";
     }
 }

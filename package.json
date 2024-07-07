@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"tailwind": "npx tailwindcss -i ./web/public/input.css -o ./web/public/styles.css",
+		"tailwind": "npx tailwindcss -i ./web/input.css -o ./web/public/styles.css --watch",
 		"lint": "npm run lint:prettier",
 		"lint:prettier": "prettier --check .",
 		"fix": "npm run fix:prettier",

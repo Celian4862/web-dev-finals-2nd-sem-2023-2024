@@ -1,9 +1,9 @@
 <?php
 
-use function Utilities\redirect;
+use Utilities\Helper;
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    redirect("/login");
+    Helper::redirect("/login");
 }
 
 session_start();
@@ -14,14 +14,14 @@ switch ($result = Employee::login($_POST["email"], $_POST["password"])) {
     case "email":
         $_SESSION["error"]["email"] = true;
         $_SESSION["previous"]["email"] = $_POST["email"];
-        redirect("/login");
+        Helper::redirect("/login");
         break;
     case "password":
         $_SESSION["error"]["password"] = true;
         $_SESSION["previous"]["email"] = $_POST["email"];
-        redirect("/login");
+        Helper::redirect("/login");
         break;
     default:
         $_SESSION["employee"] = $result;
-        redirect("/dashboard");
+        Helper::redirect("/dashboard");
 }

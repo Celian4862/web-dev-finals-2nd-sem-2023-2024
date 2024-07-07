@@ -57,15 +57,8 @@
 				"color": "terminal.ansiCyan"
 			},
 			"problemMatcher": [],
-			"command": "npx",
-			"args": [
-				"tailwindcss",
-				"-i",
-				"./web/public/input.css",
-				"-o",
-				"./web/public/styles.css",
-				"--watch"
-			]
+			"command": "npm",
+			"args": ["run", "tailwind"]
 		}
 	]
 }

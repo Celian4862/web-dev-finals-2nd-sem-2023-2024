@@ -18,16 +18,10 @@ $navigations = [
         "active" => preg_match("/dashboard\/employees/i", $path) > 0,
     ],
     [
-        "title" => "Clients",
+        "title" => "Persons",
         "icon" => "group",
-        "link" => "/dashboard/clients",
-        "active" => preg_match("/dashboard\/clients/i", $path) > 0,
-    ],
-    [
-        "title" => "Distributor",
-        "icon" => "warehouse",
-        "link" => "/dashboard/distributors",
-        "active" => preg_match("/dashboard\/distributors/i", $path) > 0,
+        "link" => "/dashboard/persons",
+        "active" => preg_match("/dashboard\/persons/i", $path) > 0,
     ],
     [
         "title" => "Inventory",
@@ -36,10 +30,10 @@ $navigations = [
         "active" => preg_match("/dashboard\/inventory/i", $path) > 0,
     ],
     [
-        "title" => "Shipments",
-        "icon" => "local_shipping",
-        "link" => "/dashboard/shipments",
-        "active" => preg_match("/dashboard\/shipments/i", $path) > 0,
+        "title" => "Orders",
+        "icon" => "list_alt",
+        "link" => "/dashboard/orders",
+        "active" => preg_match("/dashboard\/orders/i", $path) > 0,
     ],
     [
         "title" => "Receptions",
@@ -47,6 +41,12 @@ $navigations = [
         "link" => "/dashboard/receptions",
         "active" => preg_match("/dashboard\/receptions/i", $path) > 0,
     ],
+    [
+        "title" => "Archives",
+        "icon" => "archive",
+        "link" => "/dashboard/archives",
+        "active" => preg_match("/dashboard\/archives/i", $path) > 0,
+    ]
 ];
 ?>
 

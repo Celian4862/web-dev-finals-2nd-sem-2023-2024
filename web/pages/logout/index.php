@@ -1,11 +1,12 @@
 <?php
 
-use function Utilities\redirect;
+use Utilities\Helper;
 
 if ($_SERVER["REQUEST_METHOD"] === "DELETE" || isset($_GET["_method"]) && $_GET["_method"] === "DELETE") {
-    session_start();
-    unset($_SESSION["employee"]);
-    redirect("/login");
+    session_unset();
+    unset($_COOKIE["token"]);
+    setcookie("token", "", -1, "/");
+    Helper::redirect("/login");
 } else {
-    redirect("/404");
+    Helper::redirect("/404");
 }

@@ -2,56 +2,31 @@
 
 namespace Utilities;
 
-use function Utilities\getDatabase;
+use Utilities\Auth;
+use Utilities\Helper;
 
 class Employee
 {
-    public readonly string $id;
-    public readonly string $email;
-    public readonly array $time;
-
-    private array $details;
-
-    public function __construct(array $employee)
-    {
-        $this->id = $employee["id"];
-        $this->email = $employee["email"];
-        $this->details = $employee["details"];
-        $this->time = $employee["time"];
-    }
-
-    /** Returns the full name of the employee. */
-    public function getFullName(): string
-    {
-        $fullName = $this->details["fullName"];
-
-        return $fullName["firstName"] . ' ' . $fullName["middleName"][0] . '. ' . $fullName["lastName"];
-    }
-
-    public function getContact(): string
-    {
-        $contact = $this->details["contact"];
-
-        return $contact["phoneNumber"] . ' | ' . $contact["email"];
-    }
-
     /** Creates a new employee object if the credentails are correct. */
-    public static function login(string $email, string $password): self|string
+    public static function login(string $email, string $password): string
     {
-        $db = getDatabase();
+        $employee = Helper::getDatabase()->query("SELECT * FROM ONLY employee WHERE email = '$email' LIMIT 1");
 
-        $employee = $db->query("SELECT * FROM ONLY employee WHERE email = '$email' LIMIT 1");
-
-        if ($employee == null) {
+        if (!$employee) {
             return "email";
         }
 
-        if ($employee["password"] !== $password) {
+        // Check if the email is the admin email.
+        if (strcmp($email, "admin@admin.admin")) {
+            return "not admin";
+        }
+
+        if (password_verify($password, $employee["password"]) === false) {
             return "password";
         }
 
-        $db->disconnect();
+        $_SESSION["employeeID"] = $employee["id"];
 
-        return new Employee($employee);
+        return Auth::generate($email, $password);
     }
 }

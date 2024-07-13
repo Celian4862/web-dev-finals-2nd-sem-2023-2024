@@ -52,7 +52,7 @@ class Surreal
     }
 
     /** * Query a raw SurrealQL query. */
-    public function query(string $query): array|null
+    public function query(string $query): mixed
     {
         curl_setopt($this->engine, CURLOPT_HTTPHEADER, $this->target);
         curl_setopt($this->engine, CURLOPT_POSTFIELDS, $query);

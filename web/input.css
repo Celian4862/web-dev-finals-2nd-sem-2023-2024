@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+@import "./components/styles/dashboard-table.css";
+@import "./components/styles/sidebar.css";
+
+@import "./styles/dashboard.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	a,
+	input,
+	button {
+		@apply outline-none;
+	}
+
+	span.material-symbols-rounded {
+		@apply select-none;
+	}
+}
+
+@layer components {
+	.button-primary {
+		@apply bg-blue-500 ring-blue-300;
+
+		&:hover,
+		&:focus {
+			@apply bg-blue-600;
+		}
+	}
+
+	.button-success {
+		@apply bg-green-500 ring-green-300;
+
+		&:hover,
+		&:focus {
+			@apply bg-green-600;
+		}
+	}
+
+	.button-danger {
+		@apply bg-red-500 ring-red-300;
+
+		&:hover,
+		&:focus {
+			@apply bg-red-600 focus:bg-red-600;
+		}
+	}
+
+	.button-primary,
+	.button-success,
+	.button-warning,
+	.button-danger {
+		@apply rounded-md p-2 font-bold capitalize text-white transition-colors;
+
+		&:hover,
+		&:focus {
+			@apply ring;
+		}
+
+		&:disabled {
+			@apply bg-gray-400 ring-0;
+		}
+	}
+
+	.group-button {
+		@apply flex items-center justify-center gap-2;
+	}
+
+	.group-button-4 {
+		@apply flex items-center justify-center gap-4;
+	}
+
+	.group-input-box {
+		@apply flex flex-wrap justify-between gap-4;
+	}
+
+	.input-box {
+		@apply flex flex-grow flex-col gap-2;
+
+		& select {
+			@apply h-full;
+		}
+
+		& input,
+		& textarea,
+		& select {
+			@apply rounded-md border border-gray-300 p-2 text-black shadow-md outline-none ring-gray-300 transition-colors;
+
+			&[data-error="true"] {
+				@apply ring ring-red-400;
+			}
+
+			&:hover,
+			&:focus {
+				@apply ring;
+			}
+
+			&:disabled {
+				@apply bg-gray-200 ring-0;
+			}
+		}
+	}
+
+	.input-checkbox {
+		@apply relative flex items-center;
+
+		& input {
+			@apply h-5 w-5 appearance-none rounded border ring-gray-300 hover:ring focus:ring;
+
+			&:checked + span {
+				@apply opacity-100;
+			}
+		}
+
+		& span {
+			@apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0;
+		}
+	}
+
+	.input-box-sm {
+		@apply rounded-md border border-gray-300 px-2 py-1 ring-gray-300;
+
+		&:hover,
+		&:focus {
+			@apply ring;
+		}
+	}
+}
+
+.button-warning {
+	@apply bg-orange-500 ring-orange-300;
+
+	&:hover,
+	&:focus {
+		@apply bg-orange-600;
+	}
+}

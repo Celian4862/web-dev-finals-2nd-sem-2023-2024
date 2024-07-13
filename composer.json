@@ -6,10 +6,7 @@
 			"Components\\": "web/components/",
 			"Utilities\\": "web/utilities/",
 			"Services\\": "web/services/"
-		},
-		"files": [
-			"web/utilities/Utilities.php"
-		]
+		}
 	},
 	"scripts": {
 		"lint": [
@@ -18,7 +15,7 @@
 			"@lint:stan",
 			"npm run lint"
 		],
-		"lint:cs": "vendor/bin/phpcs --standard=PSR12 --ignore=*web/public/index.php*,*web/**/views/*,*web/pages/**/index.php*,*web/**/*.css* web",
+		"lint:cs": "vendor/bin/phpcs --standard=PSR12 --ignore=*web/public/index.php*,*web/**/views/*,*web/pages/**/index.php*,***/*.css*,***/*.js* web",
 		"lint:md": "vendor/bin/phpmd web text codesize,unusedcode",
 		"lint:stan": "vendor/bin/phpstan analyse web",
 		"fix:cbf": "vendor/bin/phpcbf --standard=PSR12 web"
@@ -27,5 +24,8 @@
 		"squizlabs/php_codesniffer": "*",
 		"phpmd/phpmd": "^2.15",
 		"phpstan/phpstan": "^1.11"
+	},
+	"require": {
+		"firebase/php-jwt": "^6.10"
 	}
 }

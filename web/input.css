@@ -41,15 +41,6 @@
 		}
 	}
 
-	.button-warning {
-		@apply bg-orange-500 ring-orange-300;
-
-		&:hover,
-		&:focus {
-			@apply bg-orange-600;
-		}
-	}
-
 	.button-danger {
 		@apply bg-red-500 ring-red-300;
 
@@ -90,7 +81,13 @@
 	.input-box {
 		@apply flex flex-grow flex-col gap-2;
 
-		& input {
+		& select {
+			@apply h-full;
+		}
+
+		& input,
+		& textarea,
+		& select {
 			@apply rounded-md border border-gray-300 p-2 text-black shadow-md outline-none ring-gray-300 transition-colors;
 
 			&[data-error="true"] {
@@ -108,7 +105,7 @@
 		}
 	}
 
-	.login-checkbox {
+	.input-checkbox {
 		@apply relative flex items-center;
 
 		& input {
@@ -122,5 +119,23 @@
 		& span {
 			@apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0;
 		}
+	}
+
+	.input-box-sm {
+		@apply rounded-md border border-gray-300 px-2 py-1 ring-gray-300;
+
+		&:hover,
+		&:focus {
+			@apply ring;
+		}
+	}
+}
+
+.button-warning {
+	@apply bg-orange-500 ring-orange-300;
+
+	&:hover,
+	&:focus {
+		@apply bg-orange-600;
 	}
 }

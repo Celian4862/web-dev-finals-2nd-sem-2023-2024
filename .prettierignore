@@ -1,2 +1,4 @@
 **/*.md
 **/*.php
+**/*-lock.json
+**/*.lock

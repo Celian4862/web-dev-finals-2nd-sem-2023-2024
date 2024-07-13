@@ -2,6 +2,8 @@
 
 namespace Components;
 
+use Utilities\Helper;
+
 class DashboardTable
 {
     /** Render a table in the dashboard. */
@@ -9,18 +11,23 @@ class DashboardTable
         array $elements,
         array $headers,
         callable $elementData,
-        bool $search = true,
+        callable $allowSort = null,
+        callable $allowSearch = null,
         callable $headerStyle = null,
         callable $rowStyle = null,
+        string $class = "px-4 shadow-md"
     ): void {
         include __DIR__ . "/views/dashboard-table.php";
 
         unset($elements);
         unset($headers);
-        unset($search);
+        unset($elementData);
+        unset($allowSort);
+        unset($allowSearch);
         unset($elementData);
         unset($headerStyle);
         unset($rowStyle);
+        unset($class);
     }
 
     public static function getColumnQuery(array $query, array $headers, string $column): array
@@ -46,9 +53,7 @@ class DashboardTable
             if (isset($query["search"][$header]) && $query["search"][$header]) {
                 return <<<SQL
                 WHERE
-                    string::lowercase(
-                        string::concat($column)
-                    )
+                    string::lowercase(string::concat($column))
                     CONTAINS
                     string::lowercase('{$query["search"][$header]}')
                 SQL;
@@ -72,5 +77,18 @@ class DashboardTable
         }
 
         return "ORDER BY createdAt DESC";
+    }
+
+    public static function getActiveSort(array $headers): string|null
+    {
+        foreach ($headers as $column) {
+            $name = str_replace(' ', '_', $column);
+
+            if (isset($_GET[$name])) {
+                return $name;
+            }
+        }
+
+        return null;
     }
 }

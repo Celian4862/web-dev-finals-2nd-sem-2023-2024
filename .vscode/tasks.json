@@ -11,7 +11,7 @@
 			},
 			"problemMatcher": [],
 			"command": "echo",
-			"args": ["Serving on http://localhost:3000/"]
+			"args": ["Serving on http://localhost:3000"]
 		},
 		{
 			"label": "Serve: SurrealDB",
@@ -46,7 +46,7 @@
 			},
 			"problemMatcher": [],
 			"command": "php",
-			"args": ["-S", "localhost:3000", "-f", "index.php"]
+			"args": ["-S", "0.0.0.0:3000", "-f", "index.php"]
 		},
 		{
 			"label": "Dev: Tailwind",

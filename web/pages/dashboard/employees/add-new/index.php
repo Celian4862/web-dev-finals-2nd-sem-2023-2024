@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+
 
 use Components\Sidebar;
 ?>
@@ -15,7 +15,7 @@ use Components\Sidebar;
                     <h1 class="text-3xl font-semibold">Add New Employee</h1>
                 </div>
             </div>
-            <a href="/dashboard/employees" class="button-primary ">
+            <a href="/dashboard/employees" class="button-primary group-button">
                 <span>Back</span>
                 <span class="material-symbols-rounded">arrow_back</span>
             </a>
@@ -96,7 +96,7 @@ use Components\Sidebar;
                     </div>
                 </div>
                 <div class="flex justify-end">
-                    <button type="submit" class="button-success mt-3">Submit</button>
+                    <button type="submit" class="button-success mt-3">Add Employee</button>
                 </div>
             </form>
         </div>

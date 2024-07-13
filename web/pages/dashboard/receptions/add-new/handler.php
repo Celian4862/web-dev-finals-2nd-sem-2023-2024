@@ -36,7 +36,7 @@ foreach ($_POST["products"] as $productId => $quantity) {
 
     if ($quantity > 0) {
         $receptionLineEncode[] = <<<SQL
-        RELATE (\$reception.id)->productLine->{$productId} SET quantity += $quantity;
+        RELATE (\$reception.id)->productLine->{$productId} SET quantity = $quantity;
         SQL;
 
         for ($i = 0; $i < $quantity; $i++) {

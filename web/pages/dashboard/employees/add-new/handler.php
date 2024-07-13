@@ -19,10 +19,10 @@ $addressEncode = json_encode($address);
 $employeeEncode = json_encode($employee);
 
 Helper::getDatabase()->query(<<<SQL
-    LET \$addressID = (CREATE ONLY address CONTENT $addressEncode)["id"];
-    LET \$employeeID = (CREATE ONLY employee CONTENT $employeeEncode)["id"];
+    LET \$address = (CREATE ONLY address CONTENT $addressEncode);
+    LET \$employee = (CREATE ONLY employee CONTENT $employeeEncode);
 
-    RELATE \$employeeID->addressLine->\$addressID;
+    RELATE (\$employee.id)->addressLine->(\$address.id) SET primary = true;
 SQL);
 
 Helper::redirect("/dashboard/employees");

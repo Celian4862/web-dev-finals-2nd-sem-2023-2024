@@ -4,8 +4,6 @@ use Components\Sidebar;
 use Components\DashboardTable;
 use Utilities\Helper;
 
-
-
 $db = Helper::getDatabase();
 $query = Helper::getURLQuery();
 

@@ -1,14 +1,13 @@
 <?php
 
-session_start();
-
 use Components\Sidebar;
 use Components\DashboardTable;
 use Utilities\Helper;
 
+
+
 $db = Helper::getDatabase();
 $query = Helper::getURLQuery();
-$pathQuery = Helper::getURLPathQuery();
 
 $headers = [
     "Employee ID" => "id",
@@ -44,7 +43,7 @@ SELECT * FROM (SELECT
             time.deletedAt IS NONE AND
             out.time.deletedAt IS NONE
         LIMIT 1
-    )['address'] AS address, 
+    ).address AS address, 
     details.contact.email AS contactEmail,
     details.contact.phone AS contactNumber,
     time.createdAt AS createdAt
@@ -78,13 +77,16 @@ SQL);
                     $infoQuery = Helper::getURLPathQuery(query: array_merge($query, ["info" => $id]));
 
                     return [
-                        "<a href='{$infoQuery}' class='dashboard-table-id'>$id</a>",
+                        <<<HTML
+                        <a href="{$infoQuery}" class="dashboard-table-id">$id</a>
+                        HTML,
                         $employee["name"],
                         $employee["address"],
                         $employee["contactEmail"],
                         $employee["contactNumber"]
                     ];
                 },
+                allowSearch: fn () => true,
             );
             ?>
         </div>
@@ -105,13 +107,13 @@ SQL);
             SELECT
                 id,
                 primary,
-                out as address 
+                out AS address
             FROM ->addressLine
             WHERE
                 time.deletedAt IS NONE AND
                 out.time.deletedAt IS NONE
             FETCH address
-        ) as addressLine 
+        ) AS addressLine 
     FROM ONLY $id
     WHERE time.deletedAt IS NONE
     SQL);
@@ -122,7 +124,7 @@ SQL);
             <form class="dashboard-info-container" action="/dashboard/employees/handler?<?= http_build_query($query); ?>" method="POST">
                 <div class="dashboard-info-header">
                     <h1><?= $employee["id"]; ?></h1>
-                    <button type="submit" name="close" value="true" class="button-danger disabled p-1 leading-[0] rounded-full">
+                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="close" value="true" class="button-danger p-1 leading-[0] rounded-full">
                         <span class="material-symbols-rounded">close</span>
                     </button>
                 </div>
@@ -130,7 +132,7 @@ SQL);
                     <div class="section">
                         <div class="header">
                             <h2>Login Credentials</h2>
-                            <button type="submit" name="edit" value="loginCredentials" class="<?= Helper::editButtonClass($edit, "loginCredentials"); ?> group-button text-sm">
+                            <button type="button" onclick="ForceSubmitForm(this.form, this)" name="edit" value="loginCredentials" class="<?= Helper::editButtonClass($edit, "loginCredentials"); ?> group-button text-sm">
                                 <span>Edit</span>
                                 <span class="material-symbols-rounded"><?= Helper::editButtonSymbol($edit, "loginCredentials"); ?></span>
                             </button>
@@ -151,7 +153,7 @@ SQL);
                     <div class="section">
                         <div class="header">
                             <h2>Information</h2>
-                            <button type="submit" name="edit" value="information" class="<?= Helper::editButtonClass($edit, "information"); ?> group-button text-sm">
+                            <button type="button" onclick="ForceSubmitForm(this.form, this)" name="edit" value="information" class="<?= Helper::editButtonClass($edit, "information"); ?> group-button text-sm">
                                 <span>Edit</span>
                                 <span class="material-symbols-rounded"><?= Helper::editButtonSymbol($edit, "information"); ?></span>
                             </button>
@@ -195,16 +197,16 @@ SQL);
                                 <h2>Address <?= $index + 1 ?></h2>
                                 <div class="group-button-4 text-sm">
                                     <?php if ($addressLine["primary"] === false) : ?>
-                                        <button type="submit" name="setPrimaryAddress" value='<?= json_encode([$id, $addressLine["id"]]); ?>' class="button-primary group-button">
+                                        <button type="button" onclick="ForceSubmitForm(this.form, this)" name="setPrimaryAddress" value='<?= json_encode([$id, $addressLine["id"]]); ?>' class="button-primary group-button">
                                             <span>Set Primary</span>
                                             <span class="material-symbols-rounded">tune</span>
                                         </button>
                                     <?php endif; ?>
-                                    <button type="submit" name="edit" value="addressLine-<?= $index; ?>" class="<?= Helper::editButtonClass($edit, "addressLine-$index"); ?> group-button">
+                                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="edit" value="addressLine-<?= $index; ?>" class="<?= Helper::editButtonClass($edit, "addressLine-$index"); ?> group-button">
                                         <span>Edit</span>
                                         <span class="material-symbols-rounded"><?= Helper::editButtonSymbol($edit, "addressLine-$index"); ?></span>
                                     </button>
-                                    <button type="submit" name="deleteAddressLine" value="<?= $addressLine["id"]; ?>" class="button-danger group-button">
+                                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="deleteAddressLine" value="<?= $addressLine["id"]; ?>" class="button-danger group-button">
                                         <span>Delete</span>
                                         <span class="material-symbols-rounded">delete</span>
                                     </button>
@@ -214,7 +216,7 @@ SQL);
                                 <div class="group-input-box">
                                     <div class="input-box">
                                         <label for="addressLine[<?= $index; ?>][country]">Country</label>
-                                        <input type="text" id="addressLine[<?= $index; ?>][country]" name="addressLine[<?= $addressLine["address"]["id"]; ?>][country]" value="<?= $inputs["addressLine"][$addressLine["address"]["id"]]["country"] ?? $addressLine["address"]["country"]; ?>" <?= Helper::inputDisabled($edit, "addressLine-$index"); ?> required autofocus />
+                                        <input type="text" id="addressLine[<?= $index; ?>][country]" name="addressLine[<?= $addressLine["address"]["id"]; ?>][country]" value="<?= $inputs["addressLine"][$addressLine["address"]["id"]]["country"] ?? $addressLine["address"]["country"]; ?>" <?= Helper::inputDisabled($edit, "addressLine-$index") ?> required autofocus />
                                     </div>
                                     <div class="input-box">
                                         <label for="addressLine[<?= $index; ?>][city]">City</label>
@@ -234,50 +236,50 @@ SQL);
                             </div>
                         </div>
                     <?php endforeach; ?>
-                    <div class="section">
-                        <?php if (!isset($query["addAddress"])) : ?>
-                            <a href="<?= Helper::getURLPathQuery(query: Helper::arrayToggle($query, "addAddress")); ?>" class="flex justify-center items-center rounded-2xl border-2 border-dashed h-12 font-bold text-gray-400 border-gray-400 ring-gray-200 hover:bg-gray-100 hover:ring focus:bg-gray-100 focus:ring transition-colors">Add Address</a>
-                        <?php else : ?>
-                            <div class="header">
-                                <h2>Add Address</h2>
-                                <a href="<?= Helper::getURLPathQuery(query: Helper::arrayToggle($query, "addAddress")); ?>" class="button-danger group-button">
-                                    <span>Cancel</span>
-                                    <span class="material-symbols-rounded">close</span>
-                                </a>
-                            </div>
-                            <div class="content">
-                                <div class="group-input-box">
-                                    <div class="input-box">
-                                        <label for="addAddress[country]">Country</label>
-                                        <input type="text" id="addAddress[country]" name="addAddress[country]" value="<?= $inputs["addAddress"]["country"] ?? ""; ?>" required autofocus />
+                    <?php if (count($employee["addressLine"]) < 2) : ?>
+                        <div class="section">
+                            <?php if (!isset($query["addAddress"])) : ?>
+                                <a href="<?= Helper::getURLPathQuery(query: Helper::arrayToggle($query, "addAddress")); ?>" class="flex justify-center items-center rounded-2xl border-2 border-dashed h-12 font-bold text-gray-400 border-gray-400 ring-gray-200 hover:bg-gray-100 hover:ring focus:bg-gray-100 focus:ring transition-colors">Add Address</a>
+                            <?php else : ?>
+                                <div class="header">
+                                    <h2>Add Address</h2>
+                                    <a href="<?= Helper::getURLPathQuery(query: Helper::arrayToggle($query, "addAddress")); ?>" class="button-danger group-button">
+                                        <span>Cancel</span>
+                                        <span class="material-symbols-rounded">close</span>
+                                    </a>
+                                </div>
+                                <div class="content">
+                                    <div class="group-input-box">
+                                        <div class="input-box">
+                                            <label for="addAddress[country]">Country</label>
+                                            <input type="text" id="addAddress[country]" name="addAddress[country]" value="<?= $inputs["addAddress"]["country"] ?? ""; ?>" required autofocus />
+                                        </div>
+                                        <div class="input-box">
+                                            <label for="addAddress[city]">City</label>
+                                            <input type="text" id="addAddress[city]" name="addAddress[city]" value="<?= $inputs["addAddress"]["city"] ?? ""; ?>" required />
+                                        </div>
+                                    </div>
+                                    <div class="group-input-box">
+                                        <div class="input-box">
+                                            <label for="addAddress[street]">Street</label>
+                                            <input type="text" id="addAddress[street]" name="addAddress[street]" value="<?= $inputs["addAddress"]["street"] ?? ""; ?>" required />
+                                        </div>
+                                        <div class="input-box w-20 flex-grow-0">
+                                            <label for="addAddress[zipCode]">Zip Code</label>
+                                            <input type="text" id="addAddress[zipCode]" name="addAddress[zipCode]" value="<?= $inputs["addAddress"]["zipCode"] ?? ""; ?>" required />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="group-input-box">
-                                    <div class="input-box">
-                                        <label for="addAddress[city]">City</label>
-                                        <input type="text" id="addAddress[city]" name="addAddress[city]" value="<?= $inputs["addAddress"]["city"] ?? ""; ?>" required />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="group-input-box">
-                                <div class="input-box">
-                                    <label for="addAddress[street]">Street</label>
-                                    <input type="text" id="addAddress[street]" name="addAddress[street]" value="<?= $inputs["addAddress"]["street"] ?? ""; ?>" required />
-                                </div>
-                                <div class="input-box w-20 flex-grow-0">
-                                    <label for="addAddress[zipCode]">Zip Code</label>
-                                    <input type="text" id="addAddress[zipCode]" name="addAddress[zipCode]" value="<?= $inputs["addAddress"]["zipCode"] ?? ""; ?>" required />
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="dashboard-info-footer">
                     <button type="submit" name="updateEmployee" value="<?= $employee["id"]; ?>" class="button-success group-button">
                         <span>Save</span>
                         <span class="material-symbols-rounded">save</span>
                     </button>
-                    <button type="submit" name="deleteEmployee" value="<?= $employee["id"] ?>" class="button-danger group-button">
+                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="deleteEmployee" value="<?= $employee["id"] ?>" class="button-danger group-button">
                         <span>Delete</span>
                         <span class="material-symbols-rounded">delete</span>
                     </button>

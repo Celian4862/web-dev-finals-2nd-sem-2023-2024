@@ -2,7 +2,6 @@
 
 use Components\Sidebar;
 use Components\DashboardTable;
-use PHP_CodeSniffer\Generators\HTML;
 use Utilities\Helper;
 
 $db = Helper::getDatabase();

@@ -2,6 +2,8 @@
 
 use Components\Sidebar;
 use Utilities\Helper;
+
+$db = Helper::getDatabase();
 ?>
 
 <div class="flex">
@@ -29,9 +31,16 @@ use Utilities\Helper;
                         <label for="distributor">Distributor</label>
                         <select id="distributor" name="distributor" class="h-full" required>
                             <?php
-                            $db = Helper::getDatabase();
-                            $sql = "SELECT  id, person.name AS name FROM distributor";
-                            $distributors = $db->query($sql);
+                            $distributors = $db->query(<<<SQL
+                            SELECT 
+                                id,
+                                person.name AS name
+                            FROM distributor
+                            WHERE
+                                time.deletedAt IS NONE AND
+                                person.time.deletedAt IS NONE
+                            ORDER BY name ASC
+                            SQL);
                             ?>
                             <option value="" disabled selected>Select Distributor</option>
                             <?php foreach ($distributors as $distributor) : ?>
@@ -53,12 +62,8 @@ use Utilities\Helper;
                         <div class="input-box">
                             <label for="status">Status</label>
                             <select id="status" name="status" class="h-full" required>
-                                <?php
-                                $db = Helper::getDatabase();
-                                $sql = "SELECT id, name AS name FROM deliveryStatus";
-                                $deliveries = $db->query($sql);
-                                ?>
                                 <option value="" disabled selected>Select Status</option>
+                                <?php $deliveries = $db->query("SELECT id, name FROM deliveryStatus"); ?>
                                 <?php foreach ($deliveries as $delivery) : ?>
                                     <option value="<?php echo htmlspecialchars($delivery["id"]); ?>">
                                         <?php echo htmlspecialchars($delivery["name"]); ?>
@@ -81,9 +86,14 @@ use Utilities\Helper;
                             </thead>
                             <tbody>
                                 <?php
-                                $db = Helper::getDatabase();
-                                $sql = "SELECT id, label FROM product ORDER BY label ASC";
-                                $products = $db->query($sql);
+                                $products = $db->query(<<<SQL
+                                SELECT
+                                    id,
+                                    label
+                                FROM product
+                                WHERE time.deletedAt IS NONE
+                                ORDER BY label ASC
+                                SQL);
                                 ?>
                                 <?php foreach ($products as $product) : ?>
                                     <tr class="odd:bg-gray-100 border-y border-gray-400">

@@ -3,11 +3,13 @@
 use Utilities\Helper;
 use Components\DashboardTable;
 
-$path = Helper::getURLPath();
 $query = Helper::getURLQuery();
+$pathQuery = Helper::getURLPathQuery();
+
+$activeSort = DashboardTable::getActiveSort($headers);
 ?>
 
-<div class="dashboard-table">
+<div class="dashboard-table <?= $class; ?>">
     <table>
         <thead>
             <tr>
@@ -18,20 +20,24 @@ $query = Helper::getURLQuery();
                     $localQuery = DashboardTable::getColumnQuery($query, $headers, $column);
                     ?>
 
-                    <th <?= (isset($headerStyle)) ? "style='{$headerStyle($column)}'" : "" ?> data-sorted="<?= $localQuery[$name] ?? 0; ?>">
-                        <div class="flex flex-col gap-2">
-                            <a href="<?= Helper::getURLPathQuery(query: Helper::arrayToggle($localQuery, $name, false)); ?>">
+                    <th data-sorted="<?= $localQuery[$name] ?? 0; ?>">
+                        <div <?= (isset($headerStyle)) ? "style='{$headerStyle($column)}'" : "" ?> class="flex flex-col gap-2">
+                            <a <?= ($localAllowSort = !isset($allowSort) || $allowSort($column)) ? "data-allowSort='true' href='" . Helper::getURLPathQuery(query: Helper::arrayToggle($localQuery, $name, false, true)) . "'" : ""; ?>>
                                 <span><?= $column; ?></span>
-                                <span class="material-symbols-rounded font-bold">
-                                    <?= ($localQuery[$name] ?? 1) == 1 ? "arrow_downward" : "arrow_upward" ?>
-                                </span>
+                                <?php if ($localAllowSort) : ?>
+                                    <span class="material-symbols-rounded font-bold">
+                                        <?= ($localQuery[$name] ?? 1) == 1 ? "arrow_downward" : "arrow_upward" ?>
+                                    </span>
+                                <?php endif; ?>
                             </a>
-                            <?php if ($search) : ?>
-                                <form action="<?= $path; ?>" method="GET" class="search-box">
-                                    <input type="text" name="search[<?= $name; ?>]" value="<?= $_GET["search"][$name] ?? ""; ?>" placeholder="Search" class="flex-grow outline-none rounded" />
-                                    <button type="submit" class="flex">
-                                        <span class="material-symbols-rounded text-gray-300">search</span>
-                                    </button>
+                            <?php if (isset($allowSearch) && $allowSearch($column)) : ?>
+                                <form action="<?= Helper::getURLPathQuery(query: array_merge(array_diff_key($_GET, [$name => ""]))); ?>" method="GET">
+                                    <div class="search-box">
+                                        <input type="text" name="search[<?= $name; ?>]" value="<?= $_GET["search"][$name] ?? ""; ?>" placeholder="Search" class="flex-grow outline-none rounded" />
+                                        <button type="submit" <?= isset($activeSort) ? "name='{$activeSort}' value='{$query[$activeSort]}'" : ""; ?> class="flex">
+                                            <span class="material-symbols-rounded text-gray-300">search</span>
+                                        </button>
+                                    </div>
                                 </form>
                             <?php endif; ?>
                         </div>

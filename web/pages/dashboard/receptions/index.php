@@ -1,7 +1,5 @@
 <?php
 
-
-
 use Components\Sidebar;
 use Components\DashboardTable;
 use Utilities\Helper;

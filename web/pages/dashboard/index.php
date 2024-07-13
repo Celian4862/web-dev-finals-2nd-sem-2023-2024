@@ -1,7 +1,5 @@
 <?php
 
-
-
 use Components\Sidebar;
 use Components\DashboardTable;
 use Utilities\Helper;
@@ -15,31 +13,31 @@ $cards = [
         "title" => "Employees",
         "icon" => "person",
         "link" => "/employees",
-        "description" => $db->query("array::len(SELECT id FROM employee where time.deletedAt IS NONE);"),
+        "description" => $db->query("array::len(SELECT id FROM employee WHERE time.deletedAt IS NONE);"),
     ],
     [
         "title" => "Persons",
         "icon" => "group",
         "link" => "/persons",
-        "description" => $db->query("array::len(SELECT id FROM person);"),
+        "description" => $db->query("array::len(SELECT id FROM person WHERE time.deletedAt IS NONE);"),
     ],
     [
         "title" => "Inventory",
         "icon" => "inventory_2",
         "link" => "/inventory",
-        "description" => $db->query("array::len(SELECT id FROM physicalProduct);"),
+        "description" => $db->query("array::len(SELECT id FROM product WHERE time.deletedAt IS NONE);"),
     ],
     [
         "title" => "Orders",
         "icon" => "list_alt",
         "link" => "/orders",
-        "description" => $db->query("array::len(SELECT id FROM order);"),
+        "description" => $db->query("array::len(SELECT id FROM order WHERE time.deletedAt IS NONE);"),
     ],
     [
         "title" => "Receptions",
         "icon" => "orders",
         "link" => "/receptions",
-        "description" => $db->query("array::len(SELECT id FROM reception);"),
+        "description" => $db->query("array::len(SELECT id FROM reception WHERE time.deletedAt IS NONE);"),
     ]
 ]
 ?>

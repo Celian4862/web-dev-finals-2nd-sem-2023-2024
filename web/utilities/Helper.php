@@ -43,8 +43,22 @@ class Helper
     }
 
     /** Toggle array key */
-    public static function arrayToggle(array $array, string $key, bool $remove = true): array
-    {
+    public static function arrayToggle(
+        array $array,
+        string $key,
+        bool $remove = true,
+        bool $removeOnNegative = false
+    ): array {
+        if ($removeOnNegative) {
+            if (($_SESSION["arrayToggle"][$key] ?? "") === "1") {
+                unset($_SESSION["arrayToggle"][$key]);
+
+                return array_diff_key($array, [$key => 1]);
+            } else {
+                $_SESSION["arrayToggle"][$key] = $array[$key] ?? "";
+            }
+        }
+
         return match ($remove) {
             true => match ($array[$key] ?? null) {
                 "1" => array_diff_key($array, [$key => 1]),

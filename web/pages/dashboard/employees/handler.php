@@ -9,22 +9,20 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $db = Helper::getDatabase();
 
 if (isset($_POST["close"])) {
-    session_start();
-
-    unset($_SESSION["edit"]);
-    unset($_SESSION["inputs"]);
+    unset($_SESSION["inputs"], $_SESSION["edit"]);
 
     Helper::redirect(
         Helper::getURLPathQuery(
             "/dashboard/employees",
-            array_diff_key(Helper::getURLQuery(), ["info" => ""])
+            array_diff_key(Helper::getURLQuery(), [
+                "info" => "",
+                "addAddress" => 0,
+            ])
         )
     );
 }
 
 if (isset($_POST["edit"])) {
-    session_start();
-
     $_SESSION["edit"][$_POST["edit"]] =  !($_SESSION["edit"][$_POST["edit"]] ?? false);
     $_SESSION["inputs"] = array_merge($_SESSION["inputs"] ?? [], array_diff_key(($_POST), ["edit" => ""]));
 } elseif (isset($_POST["updateEmployee"])) {
@@ -60,13 +58,19 @@ if (isset($_POST["edit"])) {
         $data = array_diff_key($data, ["addAddress" => []]);
 
         $sqlAddAddress = <<<SQL
-        LET \$addressID = (CREATE ONLY address CONTENT $addressEncode)["id"];
+        LET \$address = (CREATE ONLY address CONTENT $addressEncode);
 
-        RELATE {$employeeID}->addressLine->\$addressID;
+        RELATE {$employeeID}->addressLine->(\$address.id);
         SQL;
     }
 
     if (!empty($data)) {
+        if (password_needs_rehash($data["password"], PASSWORD_DEFAULT)) {
+            $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
+        } else {
+            unset($data["password"]);
+        }
+
         $dataEncode = json_encode($data);
 
         $sqlUpdateEmployee = "UPDATE $employeeID MERGE $dataEncode;";
@@ -79,6 +83,8 @@ if (isset($_POST["edit"])) {
             ($sqlAddAddress ?? "")
         ])));
     }
+
+    unset($_SESSION["inputs"], $_SESSION["edit"]);
 } elseif (isset($_POST["setPrimaryAddress"])) {
     [$employeeID, $addressLine] = json_decode($_POST["setPrimaryAddress"]);
 
@@ -86,13 +92,22 @@ if (isset($_POST["edit"])) {
     UPDATE {$employeeID}->addressLine SET primary = false;
     UPDATE $addressLine SET primary = true;
     SQL);
-} elseif (isset($_POST["deleteEmployee"])) {
-    $db->query("UPDATE {$_POST["deleteEmployee"]} SET time.deletedAt = time::now();");
 } elseif (isset($_POST["deleteAddressLine"])) {
     $db->query(<<<SQL
-    UPDATE (SELECT out FROM ONLY {$_POST["deleteAddressLine"]})['out'] SET time.deletedAt = time::now();
+    UPDATE (SELECT out FROM ONLY {$_POST["deleteAddressLine"]}).out SET time.deletedAt = time::now();
     UPDATE {$_POST["deleteAddressLine"]} SET time.deletedAt = time::now();
     SQL);
+} elseif (isset($_POST["deleteEmployee"])) {
+    $db->query("UPDATE {$_POST["deleteEmployee"]} SET time.deletedAt = time::now();");
+
+    unset($_SESSION["inputs"], $_SESSION["edit"]);
+
+    Helper::redirect(
+        Helper::getURLPathQuery(
+            "/dashboard/employees",
+            array_diff_key(Helper::getURLQuery(), ["info" => ""])
+        )
+    );
 }
 
 Helper::redirect(Helper::getURLPathQuery("/dashboard/employees"));

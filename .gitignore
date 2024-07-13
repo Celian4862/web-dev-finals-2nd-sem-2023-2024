@@ -1,3 +1,6 @@
 /node_modules
 /stash
 /vendor/
+
+# Ignore public styles.css because it can be built with tailwind
+/web/public/styles.css

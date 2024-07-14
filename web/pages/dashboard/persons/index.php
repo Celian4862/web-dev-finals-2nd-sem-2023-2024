@@ -17,32 +17,73 @@ $headers = [
 $sortMethod = DashboardTable::getSortMethod($query, $headers);
 $searchMethod = DashboardTable::getSearchMethod($query, $headers);
 
-$persons = $db->query(<<<SQL
-SELECT * FROM (
-    SELECT
-        id,
-        name,
-        contact.email AS contactEmail,
-        contact.phone AS contactNumber,
-        time.createdAt AS createdAt,
-        (
-            SELECT id FROM ONLY client
-            WHERE
-                person = \$parent.id AND
-                time.deletedAt IS NONE
-            LIMIT 1
-        ).id AS client,
-        (
-            SELECT id FROM ONLY distributor
-            WHERE
-                person = \$parent.id AND
-                time.deletedAt IS NONE
-            LIMIT 1
-        ).id AS distributor
-    FROM person
-    WHERE time.deletedAt IS NONE
-    $sortMethod
-) $searchMethod;
+$infoQuery = "";
+
+if (isset($query["info"])) {
+    $id = $query["info"];
+
+    $infoQuery = <<<SQL
+        person: (
+            SELECT
+                id,
+                name AS name,
+                contact AS contact,
+                address AS address,
+                (
+                    SELECT id
+                    FROM ONLY client
+                    WHERE
+                        person = $id AND
+                        time.deletedAt IS NONE
+                    LIMIT 1
+                ).id AS client,
+                (
+                    SELECT id
+                    FROM ONLY distributor
+                    WHERE
+                        person = $id AND
+                        time.deletedAt IS NONE
+                    LIMIT 1
+                ).id AS distributor
+            FROM ONLY $id
+            WHERE time.deletedAt IS NONE
+            FETCH address
+        ),
+    SQL;
+}
+
+$results = $db->query(<<<SQL
+RETURN {
+    persons: (
+        SELECT * FROM (
+            SELECT
+                id,
+                name,
+                contact.email AS contactEmail,
+                contact.phone AS contactNumber,
+                time.createdAt AS createdAt,
+                (
+                    SELECT id FROM ONLY client
+                    WHERE
+                        person = \$parent.id AND
+                        time.deletedAt IS NONE
+                    LIMIT 1
+                ).id AS client,
+                (
+                    SELECT id FROM ONLY distributor
+                    WHERE
+                        person = \$parent.id AND
+                        time.deletedAt IS NONE
+                    LIMIT 1
+                ).id AS distributor
+            FROM person
+            WHERE time.deletedAt IS NONE
+            $sortMethod
+        ) $searchMethod
+    ),
+
+    $infoQuery
+}
 SQL);
 ?>
 
@@ -53,7 +94,7 @@ SQL);
             <div class="flex items-center gap-2">
                 <span class="material-symbols-rounded text-4xl">group</span>
                 <h1 class="text-3xl font-semibold">Person</h1>
-                <span class="text-3xl text-gray-400 font-semibold">(<?= count($persons) ?>)</span>
+                <span class="text-3xl text-gray-400 font-semibold">(<?= count($results["persons"]) ?>)</span>
             </div>
             <a href="/dashboard/persons/add-new" class="button-primary group-button">
                 <span>Add Person</span>
@@ -63,7 +104,7 @@ SQL);
         <div class="dashboard-content">
             <?php
             DashboardTable::render(
-                $persons,
+                $results["persons"],
                 ["Person ID", "Name", "Contact Email", "Contact Number", "Type"],
                 function ($person) use ($query) {
                     $id = $person["id"];
@@ -115,37 +156,10 @@ SQL);
 
 <?php if (isset($query["info"])) : ?>
     <?php
-    $id = $query["info"];
-
     $edit = $_SESSION["edit"] ?? [];
     $inputs = $_SESSION["inputs"] ?? [];
 
-    $person = $db->query(<<<SQL
-    SELECT
-        id,
-        name AS name,
-        contact AS contact,
-        address AS address,
-        (
-            SELECT id
-            FROM ONLY client
-            WHERE
-                person = $id AND
-                time.deletedAt IS NONE
-            LIMIT 1
-        ).id AS client,
-        (
-            SELECT id
-            FROM ONLY distributor
-            WHERE
-                person = $id AND
-                time.deletedAt IS NONE
-            LIMIT 1
-        ).id AS distributor
-    FROM ONLY $id
-    WHERE time.deletedAt IS NONE
-    FETCH address;
-    SQL);
+    $person = $results["person"];
     ?>
 
     <?php if ($person) : ?>
@@ -218,7 +232,7 @@ SQL);
                                 <label for="address[street]">Street</label>
                                 <input type="text" id="address[street]" name="address[street]" placeholder="Optional" value="<?= $inputs["address"]["street"] ?? $person["address"]["street"] ?? ""; ?>" <?= Helper::inputDisabled($edit, "address"); ?> />
                             </div>
-                            <div class="input-box w-20 flex-grow-0">
+                            <div class="input-box">
                                 <label for="address[zipCode]">Zip Code</label>
                                 <input type="text" id="address[zipCode]" name="address[zipCode]" placeholder="Optional" value="<?= $inputs["address"]["zipCode"] ?? $person["address"]["zipCode"] ?? ""; ?>" <?= Helper::inputDisabled($edit, "address"); ?> />
                             </div>
@@ -230,7 +244,7 @@ SQL);
                         <span>Save</span>
                         <span class="material-symbols-rounded">save</span>
                     </button>
-                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="deletePerson" value="<?= $id; ?>" class="button-danger group-button">
+                    <button type="button" onclick="ForceSubmitForm(this.form, this, true)" name="deletePerson" value="<?= $id; ?>" class="button-danger group-button">
                         <span>Delete</span>
                         <span class="material-symbols-rounded">delete</span>
                     </button>

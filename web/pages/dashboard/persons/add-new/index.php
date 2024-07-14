@@ -13,7 +13,7 @@ $query = Helper::getURLQuery();
             <div class="flex items-center gap-2 justify-between">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-rounded text-4xl">person</span>
-                    <h1 class="text-3xl font-semibold">Add New Client</h1>
+                    <h1 class="text-3xl font-semibold">Add New Person</h1>
                 </div>
             </div>
             <a href="/dashboard/persons" class="button-primary group-button">
@@ -80,7 +80,7 @@ $query = Helper::getURLQuery();
                             <label for="address[street]">Street</label>
                             <input type="text" id="address[street]" name="address[street]" required></input>
                         </div>
-                        <div class="input-box w-24 flex-grow-0">
+                        <div class="input-box">
                             <label for="address[zipCode]">Zip Code</label>
                             <input type="text" id="address[zipCode]" name="address[zipCode]" required></input>
                         </div>

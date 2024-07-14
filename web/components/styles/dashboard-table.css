@@ -77,7 +77,7 @@
 		@apply flex;
 
 		& .date {
-			@apply relative w-24 flex-shrink-0 border-r text-center;
+			@apply relative flex w-24 flex-shrink-0 flex-col border-r text-center leading-none;
 
 			&:after {
 				@apply absolute right-0 top-0 h-3 w-3 translate-x-1/2 rounded-full bg-gray-400 content-[""];
@@ -105,5 +105,13 @@
 		&:not(:first-child) {
 			@apply text-gray-400;
 		}
+	}
+}
+
+.table-id {
+	@apply relative font-bold capitalize text-highlight hover:before:w-full focus:before:w-full;
+
+	&::before {
+		@apply absolute -bottom-1 left-1/2 h-[2px] w-0 -translate-x-1/2 bg-[#5273a1] transition-[width] content-[""];
 	}
 }

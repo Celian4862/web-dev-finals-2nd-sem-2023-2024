@@ -40,7 +40,7 @@
 				"--password",
 				"admin",
 				"--bind",
-				"0.0.0.0:8080",
+				"0.0.0.0:8000",
 				"file://data"
 			]
 		},
@@ -60,7 +60,7 @@
 			},
 			"problemMatcher": [],
 			"command": "php",
-			"args": ["-S", "0.0.0.0:3080", "-f", "index.php"]
+			"args": ["-S", "0.0.0.0:3000", "-f", "index.php"]
 		},
 		{
 			"label": "Dev: Tailwind",

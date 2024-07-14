@@ -31,14 +31,16 @@ if (isset($_POST["edit"])) {
         if (isset($data["physicalStocks"])) {
             $physicalStocks = intval($data["physicalStocks"]);
 
-            $currentPhysicalStocks = $db->query("array::len((SELECT id FROM {$productID}->stock));");
+            $currentPhysicalStocks = $db->query(<<<SQL
+            array::len((SELECT id FROM {$productID}->stock WHERE status = stockStatus:0));
+            SQL);
 
             $stocksEncode = [];
 
             for ($i = $currentPhysicalStocks; $i < $physicalStocks; $i++) {
                 $stocksEncode[] = <<<SQL
                 LET \$physicalProduct = (CREATE ONLY physicalProduct);
-                RELATE {$productID}->stock->(\$physicalProduct.id);
+                RELATE {$productID}->stock->(\$physicalProduct.id) SET status = stockStatus:0;
                 SQL;
             }
 

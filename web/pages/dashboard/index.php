@@ -152,6 +152,7 @@ $cards = [
                         $status,
                     ];
                 },
+                allowSort: fn () => false,
                 allowSearch: fn () => false,
                 headerStyle: fn ($column) => match ($column) {
                     "Date Shipped", "Status" => "align-items: center",
@@ -187,6 +188,7 @@ $cards = [
                         $product["physicalStocks"]
                     ];
                 },
+                allowSort: fn () => false,
                 allowSearch: fn () => false,
                 headerStyle: fn ($column) => match ($column) {
                     "Physical Stocks", "Desired Stocks" => "align-items: center;",

@@ -28,7 +28,21 @@
 			"options": {
 				"cwd": "${workspaceFolder}/database"
 			},
-			"command": "./serve.sh"
+			"command": "surreal",
+			"args": [
+				"start",
+				"--log",
+				"info",
+				"-A",
+				"--auth",
+				"--user",
+				"admin",
+				"--password",
+				"admin",
+				"--bind",
+				"0.0.0.0:8080",
+				"file://data"
+			]
 		},
 		{
 			"label": "Serve: PHP",
@@ -46,7 +60,7 @@
 			},
 			"problemMatcher": [],
 			"command": "php",
-			"args": ["-S", "0.0.0.0:3000", "-f", "index.php"]
+			"args": ["-S", "0.0.0.0:3080", "-f", "index.php"]
 		},
 		{
 			"label": "Dev: Tailwind",

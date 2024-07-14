@@ -27,20 +27,16 @@ if (isset($_POST["edit"])) {
 
     $data = array_diff_key(Helper::removeEmptyValues($_POST), ["updatePerson" => ""]);
 
-    $sqlPerson = <<<SQL
-    LET \$person = (SELECT person FROM ONLY $personID).person;
-    SQL;
-
     if (isset($data["address"])) {
         $addressEncode = json_encode($data["address"]);
 
         $data = array_diff_key($data, ["address" => ""]);
 
         $sqlUpdateAddress = <<<SQL
-        IF \$person.address = NONE THEN
-            UPDATE \$person SET address = (CREATE ONLY address CONTENT $addressEncode).id
+        IF {$personID}.address = NONE THEN
+            UPDATE {$personID} SET address = (CREATE ONLY address CONTENT $addressEncode).id
         ELSE 
-            UPDATE \$person.address MERGE $addressEncode
+            UPDATE {$personID}.address MERGE $addressEncode
         END;
         SQL;
     }
@@ -48,12 +44,11 @@ if (isset($_POST["edit"])) {
     if (!empty($data)) {
         $personEncode = json_encode(Helper::removeEmptyValues($data));
 
-        $sqlUpdatePerson = "UPDATE \$person MERGE $personEncode;";
+        $sqlUpdatePerson = "UPDATE {$personID} MERGE $personEncode;";
     }
 
     if (isset($sqlUpdateAddress) || isset($sqlUpdatePerson)) {
         $db->query(implode("\n", [
-            $sqlPerson,
             ($sqlUpdateAddress ?? ""),
             ($sqlUpdatePerson ?? "")
         ]));
@@ -61,23 +56,23 @@ if (isset($_POST["edit"])) {
 
     unset($_SESSION["inputs"], $_SESSION["edit"]);
 } elseif (isset($_POST["setClient"])) {
-    $persondID = $_POST["setClient"];
+    $personID = $_POST["setClient"];
 
     $db->query(<<<SQL
-    IF (SELECT id FROM ONLY client WHERE person = $persondID LIMIT 1) IS NONE THEN
-        CREATE ONLY client SET person = $persondID
+    IF (SELECT id FROM ONLY client WHERE person = $personID LIMIT 1) IS NONE THEN
+        CREATE ONLY client SET person = $personID
     ELSE
-        UPDATE client SET time.deletedAt = NONE WHERE person = $persondID
+        UPDATE client SET time.deletedAt = NONE WHERE person = $personID
     END;
     SQL);
 } elseif (isset($_POST["setDistributor"])) {
-    $persondID = $_POST["setDistributor"];
+    $personID = $_POST["setDistributor"];
 
     $db->query(<<<SQL
-    IF (SELECT person FROM ONLY distributor WHERE person = $persondID LIMIT 1) IS NONE THEN
-        CREATE ONLY distributor SET person = $persondID
+    IF (SELECT person FROM ONLY distributor WHERE person = $personID LIMIT 1) IS NONE THEN
+        CREATE ONLY distributor SET person = $personID
     ELSE
-        UPDATE distributor SET time.deletedAt = NONE WHERE person = $persondID
+        UPDATE distributor SET time.deletedAt = NONE WHERE person = $personID
     END;
     SQL);
 } elseif (isset($_POST["deleteClient"])) {

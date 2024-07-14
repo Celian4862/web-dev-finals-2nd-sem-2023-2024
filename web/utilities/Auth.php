@@ -31,12 +31,27 @@ class Auth
         }
 
         $employee = Helper::getDatabase()->query(<<<SQL
-        SELECT id, password FROM ONLY employee WHERE email = "{$decode->email}" LIMIT 1;
+        SELECT
+            id,
+            password,
+            (
+                string::join(
+                    " ",
+                    details.fullName.first,
+                    details.fullName.last
+                )
+            ) as name
+        FROM ONLY employee
+        WHERE email = "{$decode->email}"
+        LIMIT 1;
         SQL);
 
         if (!$employee || !password_verify($decode->password, $employee["password"])) {
             return false;
         }
+
+        // ! Temporary
+        $_SESSION["employee"] = $employee["id"];
 
         return true;
     }

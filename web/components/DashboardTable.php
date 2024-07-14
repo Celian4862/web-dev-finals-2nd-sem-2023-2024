@@ -55,7 +55,7 @@ class DashboardTable
                 WHERE
                     string::lowercase(string::concat($column))
                     CONTAINS
-                    string::lowercase('{$query["search"][$header]}')
+                    string::lowercase(string::concat('{$query["search"][$header]}'))
                 SQL;
             }
         }

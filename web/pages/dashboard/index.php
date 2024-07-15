@@ -36,6 +36,7 @@ RETURN {
                 ) AS status
             FROM reception
             WHERE time.deletedAt IS NONE
+            ORDER BY createdAt
             LIMIT 10
         ) WHERE status.id = deliveryStatus:2
     ),
@@ -58,6 +59,7 @@ RETURN {
             time.createdAt AS createdAt
         FROM product
         WHERE time.deletedAt IS NONE
+        ORDER BY createdAt
         LIMIT 10
     ),
 }

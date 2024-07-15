@@ -12,7 +12,7 @@ class Helper
         $db->connect(
             "http://localhost:8000",
             [
-                "namespace" => "dev",   
+                "namespace" => "dev",
                 "database" => "dev",
             ]
         );

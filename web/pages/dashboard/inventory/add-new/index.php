@@ -1,7 +1,5 @@
 <?php
 
-
-
 use Components\Sidebar;
 ?>
 
@@ -58,6 +56,7 @@ use Components\Sidebar;
                 <div class="flex justify-end">
                     <button type="submit" class="button-success mt-4">Add Product</button>
                 </div>
+            </form>
         </div>
     </div>
 </div>

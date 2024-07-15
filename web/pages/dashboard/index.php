@@ -1,7 +1,5 @@
 <?php
 
-
-
 use Components\Sidebar;
 use Components\DashboardTable;
 use Utilities\Helper;
@@ -10,36 +8,93 @@ $db = Helper::getDatabase();
 
 $query = Helper::getURLQuery();
 
+$results = $db->query(<<<SQL
+RETURN {
+    employeesCount: array::len(SELECT id FROM employee WHERE time.deletedAt IS NONE),
+    personsCount: array::len(SELECT id FROM person WHERE time.deletedAt IS NONE),
+    inventoryCount: array::len(SELECT id FROM product WHERE time.deletedAt IS NONE),
+    ordersCount: array::len(SELECT id FROM order WHERE time.deletedAt IS NONE),
+    receptionsCount: array::len(SELECT id FROM reception WHERE time.deletedAt IS NONE),
+
+    receptions: (
+        SELECT * FROM (
+            SELECT
+                id,
+                distributor.person as distributor.id,
+                distributor.person.name AS distributor.name,
+                delivery.dateShipped AS dateShipped,
+                time.createdAt AS createdAt,
+                (
+                    SELECT
+                        out as id,
+                        out.name AS name,
+                        time.createdAt
+                    FROM ONLY delivery->deliveryStatusLine
+                    WHERE time.deletedAt IS NONE
+                    ORDER BY time.createdAt DESC
+                    LIMIT 1
+                ) AS status
+            FROM reception
+            WHERE time.deletedAt IS NONE
+            ORDER BY createdAt
+            LIMIT 10
+        ) WHERE status.id = deliveryStatus:2
+    ),
+
+    products: (
+        SELECT
+            id,
+            label,
+            description,
+            desiredStocks,
+            array::len((
+                SELECT
+                    id,
+                    status.name AS status
+                FROM ->stock
+                WHERE
+                    time.deletedAt IS NONE AND
+                    status = stockStatus:0
+            )) AS physicalStocks,
+            time.createdAt AS createdAt
+        FROM product
+        WHERE time.deletedAt IS NONE
+        ORDER BY createdAt
+        LIMIT 10
+    ),
+}
+SQL);
+
 $cards = [
     [
         "title" => "Employees",
         "icon" => "person",
         "link" => "/employees",
-        "description" => $db->query("array::len(SELECT id FROM employee where time.deletedAt IS NONE);"),
+        "description" => $results["employeesCount"],
     ],
     [
         "title" => "Persons",
         "icon" => "group",
         "link" => "/persons",
-        "description" => $db->query("array::len(SELECT id FROM person);"),
+        "description" => $results["personsCount"],
     ],
     [
         "title" => "Inventory",
         "icon" => "inventory_2",
         "link" => "/inventory",
-        "description" => $db->query("array::len(SELECT id FROM physicalProduct);"),
+        "description" => $results["inventoryCount"],
     ],
     [
         "title" => "Orders",
         "icon" => "list_alt",
         "link" => "/orders",
-        "description" => $db->query("array::len(SELECT id FROM order);"),
+        "description" => $results["ordersCount"],
     ],
     [
         "title" => "Receptions",
         "icon" => "orders",
         "link" => "/receptions",
-        "description" => $db->query("array::len(SELECT id FROM reception);"),
+        "description" => $results["receptionsCount"],
     ]
 ]
 ?>
@@ -71,32 +126,8 @@ $cards = [
                 </div>
             </div>
             <?php
-            $receptions = $db->query(<<<SQL
-            SELECT * FROM (
-                SELECT
-                    id,
-                    distributor.person as distributor.id,
-                    distributor.person.name AS distributor.name,
-                    delivery.dateShipped AS dateShipped,
-                    time.createdAt AS createdAt,
-                    (
-                        SELECT
-                            out as id,
-                            out.name AS name,
-                            time.createdAt
-                        FROM ONLY delivery->deliveryStatusLine
-                        WHERE time.deletedAt IS NONE
-                        ORDER BY time.createdAt DESC
-                        LIMIT 1
-                    ) AS status
-                FROM reception
-                WHERE time.deletedAt IS NONE
-                LIMIT 10
-            ) WHERE status.id = deliveryStatus:2;
-            SQL);
-
             DashboardTable::render(
-                $receptions,
+                $results["receptions"],
                 ["Tracking ID", "Distributor", "Date Shipped", "Status"],
                 function ($reception) use ($query) {
                     $id = $reception["id"];
@@ -123,6 +154,7 @@ $cards = [
                         $status,
                     ];
                 },
+                allowSort: fn () => false,
                 allowSearch: fn () => false,
                 headerStyle: fn ($column) => match ($column) {
                     "Date Shipped", "Status" => "align-items: center",
@@ -141,29 +173,8 @@ $cards = [
                 </div>
             </div>
             <?php
-            $products = $db->query(<<<SQL
-            SELECT
-                id,
-                label,
-                description,
-                desiredStocks,
-                array::len((
-                    SELECT
-                        id,
-                        status.name AS status
-                    FROM ->stock
-                    WHERE
-                        time.deletedAt IS NONE AND
-                        status = stockStatus:0
-                )) AS physicalStocks,
-                time.createdAt AS createdAt
-            FROM product
-            WHERE time.deletedAt IS NONE
-            LIMIT 10;
-            SQL);
-
             DashboardTable::render(
-                $products,
+                $results["products"],
                 ["Product ID", "Label", "Description", "Desired Stocks", "Physical Stocks"],
                 function ($product) {
                     $id = $product["id"];
@@ -179,6 +190,7 @@ $cards = [
                         $product["physicalStocks"]
                     ];
                 },
+                allowSort: fn () => false,
                 allowSearch: fn () => false,
                 headerStyle: fn ($column) => match ($column) {
                     "Physical Stocks", "Desired Stocks" => "align-items: center;",

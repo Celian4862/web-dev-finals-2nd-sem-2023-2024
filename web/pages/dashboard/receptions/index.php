@@ -1,7 +1,5 @@
 <?php
 
-
-
 use Components\Sidebar;
 use Components\DashboardTable;
 use Utilities\Helper;
@@ -11,7 +9,7 @@ $query = Helper::getURLQuery();
 
 $headers = [
     "Tracking ID" => "id",
-    "Distributor" => "distributor",
+    "Distributor" => "distributor.name",
     "Date Shipped" => "dateShipped",
     "Status" => "status.name"
 ];
@@ -19,28 +17,89 @@ $headers = [
 $sortMethod = DashboardTable::getSortMethod($query, $headers);
 $searchMethod = DashboardTable::getSearchMethod($query, $headers);
 
-$receptions = $db->query(<<<SQL
-SELECT * FROM (
-    SELECT
-        id,
-        distributor.person AS distributor.id,
-        distributor.person.name AS distributor.name,
-        delivery.dateShipped AS dateShipped,
-        time.createdAt AS createdAt,
-        (
+$sqlInfo = "";
+
+if (isset($query["info"])) {
+    $id = $query["info"];
+
+    $sqlInfo = <<<SQL
+    reception: (
+        SELECT
+            id,
+            distributor AS distributor.id,
+            distributor.person.name AS distributor.name,
+            delivery.dateShipped AS dateShipped,
+            delivery.description AS description,
+            (
+                SELECT
+                    id AS statusLineId,
+                    out.id AS id,
+                    out.name AS name,
+                    eventDatetime,
+                    description
+                FROM delivery->deliveryStatusLine
+                WHERE time.deletedAt IS NONE
+                ORDER BY eventDatetime DESC
+            ) AS status,
+            (
+                SELECT
+                    id,
+                    out.label AS label,
+                    quantity
+                FROM ->productLine
+            ) AS products
+        FROM ONLY $id
+        WHERE time.deletedAt IS NONE
+    ),
+
+    selections: {
+        distributors: (
             SELECT
-                out.name AS name,
-                time.createdAt
-            FROM ONLY delivery->deliveryStatusLine
+                id,
+                person.name AS name
+            FROM distributor
+            WHERE
+                time.deletedAt IS NONE AND
+                person.time.deletedAt IS NONE
+            ORDER BY name
+        ),
+
+        deliveryStatus: (SELECT id, name FROM deliveryStatus),
+    },
+    SQL;
+}
+
+$results = $db->query(<<<SQL
+RETURN {
+    receptions: (
+        SELECT * FROM (
+            SELECT
+                id,
+                distributor.person AS distributor.id,
+                distributor.person.name AS distributor.name,
+                time::format(
+                    delivery.dateShipped,
+                    "%h %e, %Y"
+                ) AS dateShipped,
+                (
+                    SELECT
+                        out.name AS name,
+                        time.createdAt
+                    FROM ONLY delivery->deliveryStatusLine
+                    WHERE time.deletedAt IS NONE
+                    ORDER BY time.createdAt DESC
+                    LIMIT 1
+                ) AS status,
+                time.createdAt AS createdAt
+            FROM reception
             WHERE time.deletedAt IS NONE
-            ORDER BY time.createdAt DESC
-            LIMIT 1
-        ) AS status
-    FROM reception
-    WHERE time.deletedAt IS NONE
-)
-$sortMethod
-$searchMethod;
+        )
+        $searchMethod
+        $sortMethod
+    ),
+
+    $sqlInfo
+}
 SQL);
 ?>
 
@@ -51,7 +110,7 @@ SQL);
             <div class="flex items-center gap-2">
                 <span class="material-symbols-rounded text-4xl">person</span>
                 <h1 class="text-3xl font-semibold">Receptions</h1>
-                <span class="text-3xl text-gray-400 font-semibold">(<?= count($receptions) ?>)</span>
+                <span class="text-3xl text-gray-400 font-semibold">(<?= count($results["receptions"]) ?>)</span>
             </div>
             <a href="/dashboard/receptions/add-new" class="button-primary group-button">
                 <span>Add Reception</span>
@@ -61,7 +120,7 @@ SQL);
         <div class="dashboard-content">
             <?php
             DashboardTable::render(
-                $receptions,
+                $results["receptions"],
                 ["Tracking ID", "Distributor", "Date Shipped", "Status"],
                 function ($reception) use ($query) {
                     $id = $reception["id"];
@@ -84,22 +143,11 @@ SQL);
                         <<<HTML
                         <a href="{$distributorQuery}" class="dashboard-table-id">{$reception["distributor"]["name"]}</a>
                         HTML,
-                        date_create($reception["dateShipped"])->format("M, d, Y"),
+                        $reception["dateShipped"],
                         $status,
                     ];
                 },
-                allowSearch: fn ($column) => match ($column) {
-                    "Date Shipped", "Status" => false,
-                    default => true,
-                },
-                headerStyle: fn ($column) => match ($column) {
-                    "Date Shipped", "Status" => "align-items: center",
-                    default => ""
-                },
-                rowStyle: fn ($column) => match ($column) {
-                    "Date Shipped", "Status" => "text-align: center;",
-                    default => "",
-                }
+                allowSearch: fn () => true,
             );
             ?>
         </div>
@@ -108,47 +156,11 @@ SQL);
 
 <?php if (isset($query["info"])) : ?>
     <?php
-    $id = $query["info"];
-
     $edit = $_SESSION["edit"] ?? [];
     $inputs = $_SESSION["inputs"] ?? [];
 
-    $reception = $db->query(<<<SQL
-    SELECT
-        id,
-        distributor AS distributor.id,
-        distributor.person.name AS distributor.name,
-        delivery.dateShipped AS dateShipped,
-        delivery.description AS description,
-        (
-            SELECT
-                id AS statusLineId,
-                out.id AS id,
-                out.name AS name,
-                time::format(time.createdAt, "%Y-%m-%d") as createdAt,
-                description,
-                time.createdAt
-            FROM delivery->deliveryStatusLine
-            WHERE time.deletedAt IS NONE
-            ORDER BY time.createdAt DESC
-        ) AS status,
-        (
-            SELECT
-                id,
-                out.label AS label,
-                quantity
-            FROM ->productLine
-        ) AS products
-    FROM ONLY $id
-    WHERE time.deletedAt IS NONE
-    SQL);
-
-    $selections = $db->query(<<<SQL
-    RETURN {
-        distributors: (SELECT id, person.name AS name FROM distributor ORDER BY name),
-        deliveryStatus: (SELECT id, name FROM deliveryStatus),
-    }
-    SQL);
+    $reception = $results["reception"];
+    $selections = $results["selections"];
     ?>
 
     <?php if ($reception) : ?>
@@ -175,18 +187,18 @@ SQL);
                                     <label for="distributor">Distributor</label>
                                     <select id="distributor" name="distributor" <?= Helper::inputDisabled($edit, "information"); ?> class="h-full">
                                         <?php foreach ($selections["distributors"] as $distributor) : ?>
-                                            <option value="<?= $distributor["id"]; ?>" <?= $distributor["id"] === $reception["distributor"]["id"] ? "selected" : "" ?>><?= $distributor["name"]; ?></option>
+                                            <option value="<?= $distributor["id"]; ?>" <?= ($inputs["distributor"] ?? $reception["distributor"]["id"]) === $distributor["id"] ? "selected" : "" ?>><?= $distributor["name"]; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <div class="input-box flex-grow-0">
+                                <div class="input-box">
                                     <label for="dateShipped">Date Shipped</label>
-                                    <input id="dateShipped" name="dateShipped" type="date" <?= Helper::inputDisabled($edit, "information"); ?> value="<?= date_create($reception["dateShipped"])->format("Y-m-d"); ?>" class="w-36" required>
+                                    <input id="dateShipped" name="dateShipped" type="date" <?= Helper::inputDisabled($edit, "information"); ?> value="<?= $inputs["dateShipped"] ?? date_create($reception["dateShipped"])->format("Y-m-d"); ?>" required>
                                 </div>
                             </div>
                             <div class="input-box">
                                 <label for="description">Description</label>
-                                <textarea id="description" name="description" <?= Helper::inputDisabled($edit, "information"); ?> class="min-h-20 max-h-[20rem] h-20"><?= $reception["description"]; ?></textarea>
+                                <textarea id="description" name="description" <?= Helper::inputDisabled($edit, "information"); ?> class="min-h-20 max-h-[20rem] h-20"><?= $inputs["description"] ?? $reception["description"]; ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -221,13 +233,18 @@ SQL);
                             <div class="dashboard-table-tracker">
                                 <?php foreach ($reception["status"] as $index => $status) : ?>
                                     <div class="data">
-                                        <span class="date"><?= date_create($status["createdAt"])->format("d M"); ?></span>
+                                        <span class="date">
+                                            <span><?= date_create($status["eventDatetime"])->format("d M"); ?></span>
+                                            <span><?= date_create($status["eventDatetime"])->format("H:i") ?></span>
+                                        </span>
                                         <span class="event">
                                             <span>Status: <?= $status["name"]; ?></span>
                                             <span><?= $status["description"]; ?></span>
                                         </span>
                                         <div class="flex items-center">
-                                            <button type="button" onclick="ForceSubmitForm(this.form, this)" name="deleteDeliveryStatusLine" value="<?= $status["statusLineId"] ?>" class="button-danger p-1 leading-[0] rounded-full"><span class="material-symbols-rounded">delete</span></button>
+                                            <button type="button" onclick="ForceSubmitForm(this.form, this, true)" name="deleteDeliveryStatusLine" value="<?= $status["statusLineId"] ?>" class="button-danger p-1 leading-[0] rounded-full">
+                                                <span class="material-symbols-rounded">delete</span>
+                                            </button>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -253,20 +270,20 @@ SQL);
                                     <select id="addStatus[status]" name="addStatus[status]" class="h-full" required>
                                         <option value="" disabled selected>Select Status</option>
                                         <?php foreach ($selections["deliveryStatus"] as $status) : ?>
-                                            <option value="<?= $status["id"]; ?>"><?= $status["name"]; ?></option>
+                                            <option value="<?= $status["id"]; ?>" <?= ($inputs["addStatus"]["status"] ?? "") === $status["id"] ? "selected" : "" ?>><?= $status["name"]; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div>
                                     <div class="input-box">
                                         <label for="addStatus[eventDatetime]">Event</label>
-                                        <input type="datetime-local" id="addStatus[eventDatetime]" name="addStatus[eventDatetime]" value="<?= date('Y-m-d\TH:i:s'); ?>" class="w-60">
+                                        <input type="datetime-local" id="addStatus[eventDatetime]" name="addStatus[eventDatetime]" value="<?= $inputs["addStatus"]["eventDatetime"] ?? date('Y-m-d\TH:i:s'); ?>" class="w-60">
                                     </div>
                                 </div>
                             </div>
                             <div class="input-box">
                                 <label for="addStatus[description]">Description</label>
-                                <textarea id="addStatus[description]" name="addStatus[description]" class="min-h-20 max-h-[20rem] h-20"></textarea>
+                                <textarea id="addStatus[description]" name="addStatus[description]" class="min-h-20 max-h-[20rem] h-20"><?= $inputs["addStatus"]["description"] ?? ""; ?></textarea>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -276,7 +293,7 @@ SQL);
                         <span>Save</span>
                         <span class="material-symbols-rounded">save</span>
                     </button>
-                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="deleteReception" value="<?= $reception["id"] ?>" class="button-danger group-button">
+                    <button type="button" onclick="ForceSubmitForm(this.form, this, true)" name="deleteReception" value="<?= $reception["id"] ?>" class="button-danger group-button">
                         <span>Delete</span>
                         <span class="material-symbols-rounded">delete</span>
                     </button>

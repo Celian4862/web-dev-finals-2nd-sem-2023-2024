@@ -39,7 +39,7 @@ if (isset($_POST["edit"])) {
         RELATE ({$receptionID}.delivery)->deliveryStatusLine->{$addStatus["status"]}
         SET
             description = "{$addStatus["description"]}",
-            eventDatetime = <datetime> "{$addStatus["eventDatetime"]}Z"
+            eventDatetime = <datetime> "{$addStatus["eventDatetime"]}Z";
         SQL;
     }
 
@@ -53,16 +53,22 @@ if (isset($_POST["edit"])) {
         SQL;
     }
 
-    $db->query(implode("\n", [
-        ($sqlAddStatus ?? ""),
-        ($sqlReception ?? "")
-    ]));
+    if (isset($sqlReception) || isset($sqlAddStatus)) {
+        $db->query(implode("\n", [
+            ($sqlAddStatus ?? ""),
+            ($sqlReception ?? "")
+        ]));
+    }
 
     unset($_SESSION["inputs"], $_SESSION["edit"]);
 } elseif (isset($_POST["deleteDeliveryStatusLine"])) {
     $db->query("UPDATE {$_POST["deleteDeliveryStatusLine"]} SET time.deletedAt = time::now();");
 } elseif (isset($_POST["deleteReception"])) {
-    $db->query("UPDATE {$_POST["deleteReception"]} SET time.deletedAt = time::now();");
+    $receptionID = $_POST["deleteReception"];
+
+    $db->query(<<<SQL
+    UPDATE $receptionID SET time.deletedAt = time::now();
+    SQL);
 
     unset($_SESSION["inputs"], $_SESSION["edit"]);
 

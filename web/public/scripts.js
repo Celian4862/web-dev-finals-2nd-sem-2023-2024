@@ -1,5 +1,9 @@
-function ForceSubmitForm(form, button = undefined) {
+function ForceSubmitForm(form, button = undefined, confirmation = false) {
 	if (!(form instanceof HTMLFormElement)) {
+		return;
+	}
+
+	if (confirmation && !confirm("Are you sure you want to continue?")) {
 		return;
 	}
 

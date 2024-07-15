@@ -4,8 +4,6 @@ use Components\Sidebar;
 use Components\DashboardTable;
 use Utilities\Helper;
 
-
-
 $db = Helper::getDatabase();
 $query = Helper::getURLQuery();
 
@@ -20,36 +18,70 @@ $headers = [
 $sortMethod = DashboardTable::getSortMethod($query, $headers);
 $searchMethod = DashboardTable::getSearchMethod($query, $headers);
 
-$employees = $db->query(<<<SQL
-SELECT * FROM (SELECT
-    id,
-    string::join(
-        ' ',
-        details.fullName.first,
-        details.fullName.last
-    ) AS name,
-    (
+$sqlInfo = "";
+
+if (isset($query["info"])) {
+    $id = $query["info"];
+
+    $sqlInfo = <<<SQL
+    employee: (
         SELECT
-            string::join(
-                ", ",
-                out.country,
-                out.city,
-                out.street,
-                out.zipCode
-            ) AS address
-        FROM ONLY ->addressLine
-        WHERE
-            primary = true AND
-            time.deletedAt IS NONE AND
-            out.time.deletedAt IS NONE
-        LIMIT 1
-    ).address AS address, 
-    details.contact.email AS contactEmail,
-    details.contact.phone AS contactNumber,
-    time.createdAt AS createdAt
-FROM employee
-WHERE time.deletedAt IS NONE
-$sortMethod) $searchMethod;
+            *,
+            (
+                SELECT
+                    id,
+                    primary,
+                    out AS address
+                FROM ->addressLine
+                WHERE
+                    time.deletedAt IS NONE AND
+                    out.time.deletedAt IS NONE
+                FETCH address
+            ) AS addressLine 
+        FROM ONLY $id
+        WHERE time.deletedAt IS NONE
+    ),
+    SQL;
+}
+
+$results = $db->query(<<<SQL
+RETURN {
+    employees: (
+        SELECT * FROM (
+            SELECT
+                id,
+                string::join(
+                    ' ',
+                    details.fullName.first,
+                    details.fullName.last
+                ) AS name,
+                (
+                    SELECT
+                        string::join(
+                            ", ",
+                            out.country,
+                            out.city,
+                            out.street,
+                            out.zipCode
+                        ) AS address
+                    FROM ONLY ->addressLine
+                    WHERE
+                        primary = true AND
+                        time.deletedAt IS NONE AND
+                        out.time.deletedAt IS NONE
+                    LIMIT 1
+                ).address AS address, 
+                details.contact.email AS contactEmail,
+                details.contact.phone AS contactNumber,
+                time.createdAt AS createdAt
+            FROM employee
+            WHERE time.deletedAt IS NONE
+            $sortMethod
+        ) $searchMethod
+    ),
+
+    $sqlInfo
+}
 SQL);
 ?>
 
@@ -60,7 +92,7 @@ SQL);
             <div class="flex items-center gap-2">
                 <span class="material-symbols-rounded text-4xl">person</span>
                 <h1 class="text-3xl font-semibold">Employees</h1>
-                <span class="text-3xl text-gray-400 font-semibold">(<?= count($employees) ?>)</span>
+                <span class="text-3xl text-gray-400 font-semibold">(<?= count($results["employees"]) ?>)</span>
             </div>
             <a href="/dashboard/employees/add-new" class="button-primary group-button">
                 <span>Add Employee</span>
@@ -70,7 +102,7 @@ SQL);
         <div class="dashboard-content">
             <?php
             DashboardTable::render(
-                $employees,
+                $results["employees"],
                 ["Employee ID", "Name", "Address", "Contact Email", "Contact Number"],
                 function ($employee) use ($query) {
                     $id = $employee["id"];
@@ -95,28 +127,10 @@ SQL);
 
 <?php if (isset($query["info"])) : ?>
     <?php
-    $id = $query["info"];
-
     $edit = $_SESSION["edit"] ?? [];
     $inputs = $_SESSION["inputs"] ?? [];
 
-    $employee = $db->query(<<<SQL
-    SELECT
-        *,
-        (
-            SELECT
-                id,
-                primary,
-                out AS address
-            FROM ->addressLine
-            WHERE
-                time.deletedAt IS NONE AND
-                out.time.deletedAt IS NONE
-            FETCH address
-        ) AS addressLine 
-    FROM ONLY $id
-    WHERE time.deletedAt IS NONE
-    SQL);
+    $employee = $results["employee"];
     ?>
 
     <?php if ($employee) : ?>
@@ -206,7 +220,7 @@ SQL);
                                         <span>Edit</span>
                                         <span class="material-symbols-rounded"><?= Helper::editButtonSymbol($edit, "addressLine-$index"); ?></span>
                                     </button>
-                                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="deleteAddressLine" value="<?= $addressLine["id"]; ?>" class="button-danger group-button">
+                                    <button type="button" onclick="ForceSubmitForm(this.form, this, true)" name="deleteAddressLine" value="<?= $addressLine["id"]; ?>" class="button-danger group-button">
                                         <span>Delete</span>
                                         <span class="material-symbols-rounded">delete</span>
                                     </button>
@@ -228,7 +242,7 @@ SQL);
                                         <label for="addressLine[<?= $index; ?>][street]">Street</label>
                                         <input type="text" id="addressLine[<?= $index; ?>][street]" name="addressLine[<?= $addressLine["address"]["id"]; ?>][street]" value="<?= $inputs["addressLine"][$addressLine["address"]["id"]]["street"] ?? $addressLine["address"]["street"]; ?>" <?= Helper::inputDisabled($edit, "addressLine-$index"); ?> required />
                                     </div>
-                                    <div class="input-box w-20 flex-grow-0">
+                                    <div class="input-box">
                                         <label for="addressLine[<?= $index; ?>][zipCode]">Zip Code</label>
                                         <input type="text" id="addressLine[<?= $index; ?>][zipCode]" name="addressLine[<?= $addressLine["address"]["id"]; ?>][zipCode]" value="<?= $inputs["addressLine"][$addressLine["address"]["id"]]["zipCode"] ?? $addressLine["address"]["zipCode"]; ?>" <?= Helper::inputDisabled($edit, "addressLine-$index"); ?> required />
                                     </div>
@@ -264,7 +278,7 @@ SQL);
                                             <label for="addAddress[street]">Street</label>
                                             <input type="text" id="addAddress[street]" name="addAddress[street]" value="<?= $inputs["addAddress"]["street"] ?? ""; ?>" required />
                                         </div>
-                                        <div class="input-box w-20 flex-grow-0">
+                                        <div class="input-box">
                                             <label for="addAddress[zipCode]">Zip Code</label>
                                             <input type="text" id="addAddress[zipCode]" name="addAddress[zipCode]" value="<?= $inputs["addAddress"]["zipCode"] ?? ""; ?>" required />
                                         </div>
@@ -279,7 +293,7 @@ SQL);
                         <span>Save</span>
                         <span class="material-symbols-rounded">save</span>
                     </button>
-                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="deleteEmployee" value="<?= $employee["id"] ?>" class="button-danger group-button">
+                    <button type="button" onclick="ForceSubmitForm(this.form, this, true)" name="deleteEmployee" value="<?= $employee["id"] ?>" class="button-danger group-button">
                         <span>Delete</span>
                         <span class="material-symbols-rounded">delete</span>
                     </button>

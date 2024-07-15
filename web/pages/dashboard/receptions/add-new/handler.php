@@ -13,12 +13,15 @@ $db = Helper::getDatabase();
 $sqlDelivery = <<<SQL
 LET \$delivery = (CREATE ONLY delivery CONTENT {
     description: "{$_POST["deliveryDescription"]}",
-    "time.craetedAt": <datetime> "{$_POST["dateShipped"]}",
+    dateShipped: <datetime> "{$_POST["dateShipped"]}",
 });
 SQL;
 
 $sqlDeliveryStatusLine = <<<SQL
-RELATE (\$delivery.id)->deliveryStatusLine->{$_POST["status"]} SET description = "{$_POST["statusDescription"]}";
+RELATE (\$delivery.id)->deliveryStatusLine->{$_POST["status"]}
+SET
+    description = "{$_POST["statusDescription"]}",
+    eventDatetime = time::now();
 SQL;
 
 $sqlReception = <<<SQL

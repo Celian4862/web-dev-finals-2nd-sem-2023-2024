@@ -1,9 +1,35 @@
 <?php
 
-
-
 use Components\Sidebar;
 use Utilities\Helper;
+
+$db = Helper::getDatabase();
+
+$results = $db->query(<<<SQL
+RETURN {
+    distributors: (
+        SELECT 
+            id,
+            person.name AS name
+        FROM distributor
+        WHERE
+            time.deletedAt IS NONE AND
+            person.time.deletedAt IS NONE
+        ORDER BY name ASC
+    ),
+
+    deliveries: (SELECT id, name FROM deliveryStatus),
+
+    products: (
+        SELECT
+            id,
+            label
+        FROM product
+        WHERE time.deletedAt IS NONE
+        ORDER BY label ASC
+    ),
+}
+SQL);
 ?>
 
 <div class="flex">
@@ -30,78 +56,67 @@ use Utilities\Helper;
                     <div class="input-box">
                         <label for="distributor">Distributor</label>
                         <select id="distributor" name="distributor" class="h-full" required>
-                            <?php
-                            $db = Helper::getDatabase();
-                            $sql = "SELECT  id, person.name AS name FROM distributor";
-                            $distributors = $db->query($sql);
-                            ?>
                             <option value="" disabled selected>Select Distributor</option>
-                            <?php foreach ($distributors as $distributor) : ?>
-                                <option value="<?php echo htmlspecialchars($distributor["id"]); ?>">
-                                    <?php echo htmlspecialchars($distributor["name"]); ?>
+                            <?php foreach ($results["distributors"] as $distributor) : ?>
+                                <option value="<?= $distributor["id"]; ?>">
+                                    <?= $distributor["name"]; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="input-box">
                         <label for="deliveryDescription">Delivery Description</label>
-                        <textarea id="deliveryDescription" name="deliveryDescription" class="min-h-20 max-h-[20rem] h-20" required></textarea>
+                        <textarea id="deliveryDescription" name="deliveryDescription" class="min-h-20 max-h-[20rem] h-20"></textarea>
                     </div>
                     <div class="group-input-box">
                         <div class="input-box">
                             <label for="dateShipped">Date Shipped</label>
-                            <input type="date" id="dateShipped" name="dateShipped" required />
+                            <input type="date" value="<?php echo date('Y-m-d'); ?>" id="dateShipped" name="dateShipped" required />
                         </div>
                         <div class="input-box">
                             <label for="status">Status</label>
                             <select id="status" name="status" class="h-full" required>
-                                <?php
-                                $db = Helper::getDatabase();
-                                $sql = "SELECT id, name AS name FROM deliveryStatus";
-                                $deliveries = $db->query($sql);
-                                ?>
                                 <option value="" disabled selected>Select Status</option>
-                                <?php foreach ($deliveries as $delivery) : ?>
-                                    <option value="<?php echo htmlspecialchars($delivery["id"]); ?>">
-                                        <?php echo htmlspecialchars($delivery["name"]); ?>
+                                <?php foreach ($results["deliveries"] as $delivery) : ?>
+                                    <option value="<?= $delivery["id"]; ?>">
+                                        <?= $delivery["name"]; ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
-                    <div class="input-box">
-                        <label for="statusDescription">Status Description</label>
-                        <textarea id="statusDescription" name="statusDescription" class="min-h-20 max-h-[20rem] h-20" required></textarea>
-                    </div>
-                    <div class="mx-auto w-full">
-                        <table class="w-full">
-                            <thead>
-                                <tr>
-                                    <th class="p-4 text-left">Product</th>
-                                    <th clas="p-4">Quantity</th>
+                </div>
+                <div class="input-box">
+                    <label for="statusDescription">Status Description</label>
+                    <textarea id="statusDescription" name="statusDescription" class="min-h-20 max-h-[20rem] h-20"></textarea>
+                </div>
+                <div class="w-full">
+                    <table class="w-full">
+                        <thead>
+                            <tr>
+                                <th class="p-4 text-left">Product ID</th>
+                                <th class="p-4 text-left">Label</th>
+                                <th clas="p-4">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($results["products"] as $product) : ?>
+                                <tr class="odd:bg-gray-100 border-y border-gray-400">
+                                    <td class="p-2">
+                                        <a href="<?= Helper::getURLPathQuery("/dashboard/inventory", ["info" => $product["id"]]) ?>" class="table-id"><?= $product["id"]; ?></a>
+                                    </td>
+                                    <td class="w-full p-2">
+                                        <label for="product-<?= $product["id"]; ?>" class="block w-full">
+                                            <?= $product["label"]; ?>
+                                        </label>
+                                    </td>
+                                    <td class="p-2 border-l border-dashed border-gray-300">
+                                        <input type="number" min="0" id="product-<?= $product["id"]; ?>" name="products[<?= $product["id"]; ?>]" class="input-box-sm" />
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $db = Helper::getDatabase();
-                                $sql = "SELECT id, label FROM product ORDER BY label ASC";
-                                $products = $db->query($sql);
-                                ?>
-                                <?php foreach ($products as $product) : ?>
-                                    <tr class="odd:bg-gray-100 border-y border-gray-400">
-                                        <td class="w-full p-2">
-                                            <label for="product-<?php echo htmlspecialchars($product["id"]); ?>" class="block w-full">
-                                                <?php echo htmlspecialchars($product["label"]); ?>
-                                            </label>
-                                        </td>
-                                        <td class="p-2 border-l border-dashed border-gray-300">
-                                            <input type="number" min="0" id="product-<?php echo htmlspecialchars($product["id"]); ?>" name="products[<?php echo htmlspecialchars($product["id"]); ?>]" class="input-box-sm" />
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="flex justify-end m">
                     <button type="submit" class="button-success mt-3">Add Reception</button>

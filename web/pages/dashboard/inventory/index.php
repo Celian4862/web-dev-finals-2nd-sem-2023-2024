@@ -4,8 +4,6 @@ use Components\Sidebar;
 use Components\DashboardTable;
 use Utilities\Helper;
 
-
-
 $db = Helper::getDatabase();
 $query = Helper::getURLQuery();
 
@@ -20,27 +18,62 @@ $headers = [
 $sortMethod = DashboardTable::getSortMethod($query, $headers);
 $searchMethod = DashboardTable::getSearchMethod($query, $headers);
 
-$products = $db->query(<<<SQL
-SELECT * FROM (
-    SELECT
-        id,
-        label,
-        description,
-        desiredStocks,
-        array::len((
+$sqlInfo = "";
+
+if (isset($query["info"])) {
+    $id = $query["info"];
+
+    $sqlInfo = <<<SQL
+    product: (
+        SELECT
+            id,
+            label,
+            description,
+            buyingPrice,
+            sellingPrice,
+            desiredStocks,
+            array::len((
+                SELECT
+                    id,
+                    status.name AS status
+                FROM ->stock
+                WHERE
+                    time.deletedAt IS NONE AND
+                    status = stockStatus:0
+            )) AS physicalStocks
+        FROM ONLY $id
+        WHERE time.deletedAt IS NONE
+    ),
+    SQL;
+}
+
+$results = $db->query(<<<SQL
+RETURN {
+    products: (
+        SELECT * FROM (
             SELECT
                 id,
-                status.name AS status
-            FROM ->stock
-            WHERE
-                time.deletedAt IS NONE AND
-                status = stockStatus:0
-        )) AS physicalStocks,
-        time.createdAt AS createdAt
-    FROM product
-    WHERE time.deletedAt IS NONE
-    $sortMethod
-) $searchMethod;
+                label,
+                description,
+                desiredStocks,
+                array::len((
+                    SELECT
+                        id,
+                        status.name AS status
+                    FROM ->stock
+                    WHERE
+                        time.deletedAt IS NONE AND
+                        status = stockStatus:0
+                )) AS physicalStocks,
+                time.createdAt AS createdAt
+            FROM product
+            WHERE time.deletedAt IS NONE
+            $sortMethod
+        ) $searchMethod
+    ),
+
+    $sqlInfo
+}
 SQL);
 ?>
 
@@ -51,7 +84,7 @@ SQL);
             <div class="flex items-center gap-2">
                 <span class="material-symbols-rounded text-4xl">inventory_2</span>
                 <h1 class="text-3xl font-semibold">Inventory</h1>
-                <span class="text-3xl text-gray-400 font-semibold">(<?= count($products) ?>)</span>
+                <span class="text-3xl text-gray-400 font-semibold">(<?= count($results["products"]) ?>)</span>
             </div>
             <a href="/dashboard/inventory/add-new" class="button-primary group-button">
                 <span>Add Product</span>
@@ -61,7 +94,7 @@ SQL);
         <div class="dashboard-content">
             <?php
             DashboardTable::render(
-                $products,
+                $results["products"],
                 ["Product ID", "Label", "Description", "Desired Stocks", "Physical Stocks"],
                 function ($product) {
                     $id = $product["id"];
@@ -97,31 +130,10 @@ SQL);
 
 <?php if (isset($query["info"])) : ?>
     <?php
-    $id = $query["info"];
-
     $edit = $_SESSION["edit"] ?? [];
     $inputs = $_SESSION["inputs"] ?? [];
 
-    $product = $db->query(<<<SQL
-    SELECT
-        id,
-        label,
-        description,
-        buyingPrice,
-        sellingPrice,
-        desiredStocks,
-        array::len((
-            SELECT
-                id,
-                status.name AS status
-            FROM ->stock
-            WHERE
-                time.deletedAt IS NONE AND
-                status = stockStatus:0
-        )) AS physicalStocks
-    FROM ONLY $id
-    WHERE time.deletedAt IS NONE;
-    SQL);
+    $product = $results["product"];
     ?>
 
     <?php if ($product) : ?>
@@ -179,7 +191,7 @@ SQL);
                         <span>Save</span>
                         <span class="material-symbols-rounded">save</span>
                     </button>
-                    <button type="button" onclick="ForceSubmitForm(this.form, this)" name="deleteProduct" value="<?= $product["id"] ?>" class="button-danger group-button">
+                    <button type="button" onclick="ForceSubmitForm(this.form, this, true)" name="deleteProduct" value="<?= $product["id"] ?>" class="button-danger group-button">
                         <span>Delete</span>
                         <span class="material-symbols-rounded">delete</span>
                     </button>

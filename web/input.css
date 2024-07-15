@@ -75,7 +75,11 @@
 	}
 
 	.group-input-box {
-		@apply flex flex-wrap justify-between gap-4;
+		@apply flex flex-wrap justify-between gap-4 lg:flex-nowrap;
+
+		& .input-box {
+			@apply lg:w-full;
+		}
 	}
 
 	.input-box {

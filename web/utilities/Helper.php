@@ -10,9 +10,9 @@ class Helper
         $db = new Surreal();
 
         $db->connect(
-            "http://localhost:8080",
+            "http://localhost:8000",
             [
-                "namespace" => "dev",
+                "namespace" => "dev",   
                 "database" => "dev",
             ]
         );
